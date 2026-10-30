@@ -399,3 +399,63 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# ============================================================
+# OBIComponents - .gitignore
+# ============================================================
+
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# --- Build / Compiled output ---
+style/compiled/
+
+# --- Mock database (contains real user PII and credentials) ---
+database.json
+
+# --- Internal deployment scripts (contain internal server names) ---
+push.cmd
+push.dev.cmd
+pull.cmd
+
+# --- Testing / Playground files (may contain hardcoded credentials) ---
+singleComponentTestingArea.html
+test.html
+tasks-integration.html
+tasks-page.html
+playground.html
+testingClash/
+
+# --- Environment / secrets ---
+.env
+.env.*
+*.env
+*.secret
+*.key
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.suo
+*.user
+*.swp
+*~
+
+# --- OS artifacts ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Temporary / misc ---
+*.tmp
+*.bak
+*.orig
+
