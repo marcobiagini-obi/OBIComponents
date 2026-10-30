@@ -1,0 +1,81 @@
+@use "sass:color";
+
+/* PALETTE */
+$success: #009407;
+$warning: #948000;
+$danger: #93000A;
+$info: #00948D;
+
+$neutral: #5f5c5a;
+$neutral_alt: #5f5d5a;
+$neutral_loader: #8a8583;
+
+/* LAYERS AND SHADOW */
+$shadow_settings: 0px 2px 5px 1px color.adjust($color: $neutral, $alpha: -0.4);
+$shadow_settings_dark: 0px 2px 5px 1px color.adjust(rgb(0, 0, 0), $alpha: -0.4);
+$inset_shadow_settings: inset 0px 0px 5px 1px color.adjust($color: $neutral, $alpha: -0.4);
+
+$layer_0: 0;
+$layer_1: 11;
+$layer_2: 101;
+$layer_3: 1001;
+$layer_4: 10001;
+$layer_5: 100001;
+
+/* SCREEN & FONT SIZES */
+$screen_sm: 576px;
+$screen_md: 768px;
+$screen_lg: 992px;
+$screen_xl: 1200px;
+$screen_xxl: 1400px;
+
+
+$screen_sizes: "sm"$screen_sm,
+    "md"$screen_md,
+    "lg"$screen_lg,
+    "xl"$screen_xl,
+    "xxl"$screen_xxl;
+
+$distance_sizes: "none" unset,
+    "xs" 4px,
+    "sm" 8px,
+    "md" 16px,
+    "lg" 24px,
+    "xl" 32px,
+    "xxl" 40px;
+
+$font_sizes: "h1" light 6rem -1.5px inherit,
+    "h2" light 3.75rem -0.5px inherit,
+    "h3" normal 3rem 0px inherit,
+    "h4" normal 2.125rem 0.25px inherit,
+    "h5" normal 1.5rem 0px inherit,
+    "h6" medium 1.25rem 0.15px inherit,
+    "subtitle1" normal 1rem 0.15px inherit,
+    "subtitle2" medium 0.875rem 0.1px inherit,
+    "body1" normal 1rem 0.5px inherit,
+    "body2" normal 0.875rem 0.25px inherit,
+    "button" normal 0.875rem 1.25px uppercase,
+    "caption" normal 0.75rem 0.4px inherit;
+
+
+$flex_positions: "center" center,
+    "start" flex-start,
+    "end" flex-end,
+    "around" space-around,
+    "between" space-between,
+    "evenly" space-evenly,
+;
+$grid_lines: page-start, quote-start, article-start, page-middle, article-end, quote-end, page-end;
+$grid_size: 6;
+/*DEFAULT VALUES*/
+$default_opacity: .7;
+$default_border: solid 1px $neutral_alt;
+
+$palette: "primary" "primary",
+    "secondary" "secondary",
+    "tertiary" "tertiary",
+    "neutral"$neutral_alt,
+    "success"$success,
+    "warning"$warning,
+    "danger"$danger,
+    "info"$info

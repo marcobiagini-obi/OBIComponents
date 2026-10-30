@@ -1,0 +1,93 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+
+.txt-upper {
+    text-transform: uppercase !important;
+}
+
+[uppercase] {
+    text-transform: uppercase !important;
+}
+
+@each $name,
+$weight,
+$size,
+$spacing,
+$transform in $font_sizes {
+    [font-type='#{$name}'] {
+        font-weight: $weight;
+        font-size: $size;
+        letter-spacing: $spacing;
+        text-transform: $transform;
+    }
+
+    .txt-#{$name} {
+        font-weight: $weight;
+        font-size: $size;
+        letter-spacing: $spacing;
+        text-transform: $transform;
+    }
+
+    [title-size='#{$name}'] {
+        & [obi-title]>span:first-child {
+            font-size: $size !important;
+        }
+    }
+}
+
+@each $name, $color in $palette {
+    [text-color='#{$name}'] {
+        @include setText($color);
+    }
+}
+
+@include darkmode() {
+    @each $name, $color in $palette {
+        [text-color='#{$name}'] {
+            @include setText($color, "dark");
+        }
+    }
+}
+
+// $code_color_list: string #ce9178, keyword #569cd6, object #9cdcfe, function #dcdc8b, brackets #dcdc8b #ce70b3 #1b9ff1, comment #6a9955
+
+span[string] {
+    color: #ce9178;
+
+    & * {
+        color: #ce9178 !important;
+    }
+}
+
+span[brackets] {
+    color: #dcdc8b;
+
+    &>span[brackets] {
+        color: #ce70b3;
+
+        &>span[brackets] {
+            color: #1b9ff1;
+        }
+    }
+}
+
+span[keyword] {
+    color: #ce70b3;
+}
+
+span[function] {
+    color: #9cdcfe;
+}
+
+span[type],
+span[tag] {
+    color: #569cd6;
+}
+
+span[comment] {
+    color: #6a9955;
+
+    & * {
+        color: #6a9955 !important;
+    }
+}

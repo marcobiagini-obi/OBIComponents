@@ -1,0 +1,147 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+
+div[obi-file] {
+    @include disabled();
+    z-index: $layer_1;
+
+    &[required] {
+        & [obi-button] .txt-button {
+            &:after {
+                content: "*";
+            }
+        }
+    }
+
+    &[invalid] {
+        & [file-droparea] {
+            border-color: $danger;
+            color: $danger;
+        }
+    }
+
+    & [file-droparea] {
+        min-width: 252px;
+        min-height: 120px;
+        margin-bottom: 8px;
+        border-radius: var(--global-radius);
+        border-style: dashed !important;
+        background-color: unset !important;
+        border: 1px solid $neutral_alt;
+        padding: 8px;
+        cursor: pointer;
+
+        & [file-item] {
+            display: flex;
+            flex-direction: row;
+            flex-grow: unset;
+            align-items: center;
+            padding: 8px;
+            border-radius: var(--global-radius);
+            @include setSurface("dim");
+
+            &>* {
+                margin: 0 8px;
+            }
+
+            & [file-info] {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+
+                & span {
+                    &:first-child {
+                        max-width: 200px;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        display: inline;
+                        text-wrap: nowrap;
+                    }
+
+                    &:last-child {
+                        opacity: 60%;
+                        font-size: small;
+                    }
+                }
+            }
+
+            & [obi-button] {
+                height: 30px;
+                width: 30px;
+                min-height: unset;
+                margin-left: 16px;
+            }
+        }
+
+        & [placeholder] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 40%;
+            text-align: center;
+
+        }
+
+        &[fill] {
+            border-style: solid !important;
+        }
+    }
+
+    &[icon] {
+        & [file-droparea] {
+            position: absolute;
+            display: none;
+            margin-bottom: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            border: unset !important;
+            min-height: unset;
+
+            & [placeholder] {
+                display: none;
+            }
+
+            &[fill] {
+                bottom: 100%;
+                display: flex;
+
+                &[options-open] {
+                    margin-bottom: 90px;
+                }
+            }
+        }
+
+        &[float-container='show'] {
+
+            & [file-droparea] {
+                margin-bottom: 24px;
+            }
+
+            & [options] {
+                position: absolute;
+                bottom: unset !important;
+                top: 0 !important;
+                left: 0 !important;
+                top: unset !important;
+                margin-top: -8.5px;
+            }
+        }
+
+        // & [options] {
+        //     position: absolute;
+        //     left: 0;
+        //     bottom: 100%;
+        // }
+    }
+
+    & input[type='file'] {
+        display: none;
+    }
+
+}

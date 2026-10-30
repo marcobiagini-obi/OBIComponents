@@ -1,0 +1,209 @@
+@import "../.res/shadows.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+@import "../.res/animations.scss";
+@import "../.res/input.scss";
+
+[app-header] {
+    position: sticky;
+    top: 0;
+    grid-area: header;
+    height: 50px;
+    z-index: $layer_3;
+    width: 100%;
+    @include setColor("brand");
+    @include unprintable();
+
+    &[clean] {
+
+        @include setSurface("default");
+
+        & div[app-tools] {
+            @include setSurface("default");
+
+            &>button,
+            &>[float-container]>button {
+                @include setSurface("default");
+            }
+
+            &>div[app-search] {
+                & [group-component] {
+                    @include setText($neutral, "light");
+                }
+            }
+        }
+    }
+
+    &[fixed] {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    &>div[company-logo] {
+        position: absolute;
+        top: 0;
+        left: 20px;
+        height: 35px;
+        width: 80px;
+        background-image: url("../../../resources/images/obi.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+    &>div[app-title] {
+        @include obi-font();
+        display: inline-block;
+        background-color: #ff7f08;
+        color: #FFF;
+        font-weight: bolder;
+        margin-left: 100px;
+        margin-top: 8px;
+        padding: 8px;
+        cursor: pointer;
+    }
+
+    &>div[app-tools] {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        float: right;
+        height: 100%;
+        padding: 0 10px;
+        overflow: hidden;
+
+        & [tool-item] {
+            margin: 0 8px;
+            border: unset;
+        }
+
+        &>div[obi-card] {
+            padding: 0;
+            margin: 0;
+        }
+
+        &>div[app-search] {
+            position: fixed;
+            top: 4px;
+            left: 50%;
+            margin-left: -200px;
+            width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border-radius: var(--global-radius);
+
+            & [group-component] {
+                flex-grow: 1;
+                align-items: center !important;
+                padding-left: 8px;
+                border: solid 1px;
+                @include setText($neutral, "on_light");
+
+                & input {
+                    font-size: 1rem;
+                    height: 42px;
+                    @include input();
+                }
+
+                & button {
+                    height: 42px;
+                }
+            }
+
+            & div[obi-list][interact] {
+                & [list-item] {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    align-items: flex-start;
+                    margin: 8px;
+                    padding: 0;
+                }
+            }
+
+        }
+    }
+
+    &>[user-area] {
+        float: right;
+    }
+
+    @include media-breakpoint("lg", true) {
+        &>div[company-logo] {
+            display: none;
+        }
+
+        &>div[app-title] {
+            margin: 0px;
+            font-size: 1.2rem;
+        }
+
+        &>div[app-tools] {
+            &>div[app-search] {
+
+                &[float-container='show'] {
+                    position: fixed;
+                    width: 100%;
+                    height: 50px;
+                    z-index: $layer_4;
+                    @include setSurface("default");
+                }
+
+                position: relative;
+                width: 100px;
+                overflow: hidden;
+                margin-left: 0;
+                top: 0;
+                left: 0;
+                justify-content: flex-end;
+                transition: width .5s ease,
+                height .5s ease;
+
+                & [obi-button] {
+                    flex-grow: unset;
+                }
+
+                &>[group-component] {
+                    border: 0;
+                }
+            }
+        }
+    }
+
+    @include media-breakpoint("sm", true) {
+        &>div[app-tools] {
+            height: 0;
+            width: 100% !important;
+            max-width: unset !important;
+            @include setColor("brand");
+        }
+
+        &:hover {
+            &>div[app-tools] {
+                height: unset !important;
+            }
+        }
+    }
+}
+
+@include darkmode() {
+    & [app-header] {
+        @include setColor("brand", "dark");
+
+        &[clean] {
+
+            @include setSurface("default", true);
+
+            & div[app-tools],
+            & div[app-tools]>button,
+            & div[app-tools]>[float-container]>button {
+                @include setSurface("default", true);
+            }
+        }
+    }
+}

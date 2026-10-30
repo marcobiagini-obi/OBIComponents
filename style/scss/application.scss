@@ -1,0 +1,315 @@
+@import "./.res/shadows.scss";
+@import "./.res/colors.scss";
+@import "./.res/variants.scss";
+@import "./.res/animations.scss";
+
+div[obi-app] {
+    flex-grow: auto;
+    display: grid;
+    grid-template-areas:
+        'header header header'
+        'menu content content';
+    grid-template-rows: 50px auto;
+    grid-template-columns: auto 1fr 1fr;
+    height: 100vh;
+
+    &[vertical-layout] {
+        grid-template-areas:
+            'header header header'
+            'menu menu menu'
+            'content content content'
+            'footer footer footer';
+        grid-template-rows: 50px auto 1fr auto;
+        grid-template-columns: auto;
+
+        &>[app-menu] {
+            flex-direction: row !important;
+            width: 98% !important;
+            height: 40px;
+            min-height: 40px;
+            max-height: 40px;
+            max-width: unset;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: unset;
+            margin: 0 20px;
+
+            & [nav-item] {
+                border-radius: unset !important;
+                height: 100%;
+
+                &:has([obi-icon]) {
+                    padding-right: 24px;
+                }
+            }
+        }
+    }
+
+    &>[app-header] {
+        grid-area: header;
+    }
+
+    &>[app-menu] {
+        grid-area: menu;
+    }
+
+    &>[app-content] {
+        grid-area: content;
+        padding: var(--global-padding);
+        border-radius: var(--global-radius);
+        overflow: auto;
+        @include setSurface("container");
+    }
+
+    // &>[app-footer] {
+    //     grid-area: footer;
+    // }
+
+    @include media-breakpoint('md', true) {
+        grid-template-areas:
+            'header header header'
+            'content content content'
+            'menu menu menu';
+
+
+        &>[app-menu] {
+            flex-direction: row-reverse !important;
+            width: 100% !important;
+            max-width: unset !important;
+            align-items: flex-end !important;
+            justify-content: center !important;
+            max-height: 70px !important;
+            height: 70px !important;
+            min-height: 70px !important;
+            position: fixed !important;
+            bottom: 0 !important;
+            z-index: $layer_3 !important;
+            margin: unset !important;
+            padding: 12px;
+            @include setSurface("default");
+
+            & [nav-item] {
+                border-radius: var(--global-radius);
+
+                &:has([obi-icon]) {
+                    padding-right: 12px !important;
+                    height: unset;
+                    border-radius: var(--global-radius);
+                }
+            }
+        }
+
+        &>[app-content] {
+            margin-bottom: 70px;
+        }
+    }
+}
+
+div[user-area] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    height: 48px;
+
+    &>a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--global-radius);
+        height: 48px;
+        padding-right: 8px;
+        @include ripple();
+    }
+
+    & [float-toggle] {
+        display: flex;
+        flex-direction: row;
+    }
+
+    & div[obi-title] {
+        align-items: flex-end;
+        justify-content: center;
+        margin: 0 12px;
+
+        & span:nth-child(1) {
+            line-height: 1.2em;
+        }
+    }
+
+    & div[user-details] {
+        width: 500px;
+        z-index: $layer_3;
+        right: 0 !important;
+        left: unset !important;
+        margin: 0;
+        @include setSurface("bright");
+        @include elevated();
+
+        & section[card-body] {
+            display: flex;
+            flex-direction: column;
+            max-height: 500px;
+            overflow: auto;
+
+            & div[dettagli] {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            & div[negozi],
+            & div[fornitori] {
+                & section[lista] {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    padding: 0;
+                    max-height: 200px;
+                    overflow: auto;
+
+                    & div[obi-chip] {
+                        flex-grow: 1;
+                        margin: 4px;
+                    }
+                }
+            }
+        }
+
+        @include media-breakpoint("md", true) {
+            width: 94vw !important;
+            margin-left: -47vw !important;
+            left: 50%;
+            right: unset;
+        }
+    }
+}
+
+div[obi-login] {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+
+    @include media-breakpoint("md", true) {
+        & [login-form] {
+            margin-left: unset !important;
+            flex-direction: column !important;
+            height: unset !important;
+            max-width: 90% !important;
+            min-width: 90% !important;
+            margin-top: -150px;
+
+            & [obi-cover] {
+                width: 100% !important;
+                height: 150px !important;
+
+                & img {
+                    border-radius: var(--global-radius) var(--global-radius) 0 0 !important;
+                }
+            }
+
+            & [obi-card] {
+                border-radius: 0 0 var(--global-radius) var(--global-radius) !important;
+                padding: 0 16px !important;
+
+                & section {
+                    &[card-body] {
+                        padding: 16px !important;
+                    }
+                }
+            }
+        }
+    }
+
+    & [login-form] {
+        margin-left: -200px;
+        height: 290px;
+        min-width: 600px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        & [obi-cover] {
+            height: 100%;
+            width: 200px;
+            flex-grow: 1;
+
+            & img {
+                border-radius: var(--global-radius) 0 0 var(--global-radius);
+            }
+        }
+
+        & [obi-card] {
+            border-radius: 0 var(--global-radius) var(--global-radius) 0;
+            flex-grow: 2;
+            @include setSurface("container_hight");
+            margin: 0;
+            padding: 0 32px;
+
+            & [obi-title] {
+                font-size: 1.5rem;
+                font-weight: 600;
+                @include setText("primary");
+            }
+
+            &>section {
+                padding: 16px;
+
+                &[card-body] {
+                    padding: 0 16px;
+                }
+            }
+        }
+    }
+}
+
+div[obi-dashboard],
+div[element='obi-dashboard'] {
+
+    & [apps-container] {
+        & [display-grid] {
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr !important;
+        }
+    }
+}
+
+
+div[obi-maintenance] {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 93vh;
+}
+
+@include darkmode() {
+    & div[obi-app] {
+
+        &>div[app-content] {
+            @include setSurface("container", true);
+        }
+
+        @include media-breakpoint('md', true) {
+            & [app-menu] {
+                @include setSurface("default", true);
+            }
+        }
+    }
+
+    div[user-area] {
+
+        & div[user-details],
+        & div[user-login] {
+            @include setSurface("bright", true);
+        }
+    }
+}

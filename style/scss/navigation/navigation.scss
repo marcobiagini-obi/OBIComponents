@@ -1,0 +1,203 @@
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/animations.scss";
+
+
+@mixin collapsed() {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    padding: 6px;
+    align-items: center;
+
+    & [obi-headline] {
+        font-size: .6rem;
+        opacity: .6;
+    }
+
+    &:focus {
+        @include setSurface("container");
+    }
+
+    & [nav-item] {
+        flex-direction: column;
+        margin: 0px 6px 32px 6px;
+        padding: 0 12px;
+        overflow: visible;
+        height: 32px;
+        width: 56px;
+        justify-content: center;
+        align-items: center;
+
+        & div[nav-label] {
+            position: absolute;
+            bottom: -20px;
+            padding-top: 4px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        & span[obi-badge] {
+            top: -8px;
+            left: 50%;
+            position: absolute;
+        }
+
+        // span.ripple {
+        //     display: none;
+        // }
+
+        & div[obi-icon] {
+            padding: 0;
+        }
+    }
+
+    &[dynamic] {
+        z-index: $layer_3;
+        width: 80px;
+        max-width: 80px;
+        transition: width .5s ease-in-out, min-width .5s ease-in-out, max-width .5s ease-in-out;
+
+        &:hover {
+            width: 336px;
+            max-width: 336px;
+
+            & [nav-item] {
+                flex-direction: row;
+                justify-content: flex-start;
+                height: 56px;
+                width: 100%;
+                margin: unset;
+
+                // span.ripple {
+                //     display: block;
+                // }
+
+                & [obi-icon] {
+                    padding: 0 12px 0 4px;
+                }
+
+                & [obi-badge] {
+                    position: relative;
+                    left: 0;
+                    top: 0;
+                }
+
+                & [nav-label] {
+                    position: relative;
+                    bottom: unset;
+                    padding-top: unset;
+                    max-width: unset;
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
+}
+
+[obi-nav] {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 12px;
+    width: 336px;
+    min-width: 336px;
+    max-width: 336px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 100%;
+    @include disabled();
+    @include unprintable();
+
+    & [nav-item] {
+        position: relative;
+        display: flex;
+        flex-grow: unset;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        border-radius: var(--global-radius); //25px/50%;
+        padding: 0 12px;
+        height: 56px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        color: unset;
+        text-decoration: unset;
+        overflow: hidden;
+        @include sizes();
+        // @include ripple();
+
+        cursor: pointer;
+
+        // span.ripple {
+        //     position: absolute;
+        //     border-radius: 50%;
+        //     transform: scale(0);
+        //     animation: ripple 600ms linear;
+        //     background-color: rgba(255, 255, 255, 0.7);
+        // }
+
+        &:hover,
+        &:focus {
+            @include setColor($neutral, "light_container");
+        }
+
+        &[attivo] {
+            @include setColor("primary", "light_container");
+        }
+
+        & [obi-icon] {
+            padding: 0 12px 0 4px;
+        }
+
+        & [obi-badge] {
+            position: relative;
+            display: block;
+            left: 0;
+            top: 0;
+            padding: 2px 12px;
+        }
+
+        & [nav-label] {
+            flex-grow: 1;
+        }
+
+        &:has([obi-icon]) {
+            padding-right: 16px;
+        }
+    }
+
+    @include media-breakpoint('md', true) {
+        @include collapsed();
+    }
+
+    &[collapsed] {
+        @include collapsed();
+    }
+
+}
+
+@include darkmode() {
+    & [obi-nav] {
+        & [nav-item] {
+
+            &:hover,
+            &:focus {
+                @include setColor($neutral, "dark_container");
+            }
+
+            &[attivo] {
+                @include setColor("primary", "dark_container");
+            }
+
+            & span[obi-badge] {
+                border-radius: .7em/50%;
+                @include setColor("primary", "dark");
+            }
+        }
+    }
+}

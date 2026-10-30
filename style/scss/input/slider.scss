@@ -1,0 +1,153 @@
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/input.scss";
+
+div[obi-slider] {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @include disabled;
+
+    &[required] {
+        & label::after {
+            content: " *";
+        }
+    }
+
+    --slider-width: 0;
+    --slider-dot: 0;
+
+    & div[slider-container] {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-radius: var(--global-radius);
+        flex-grow: 1;
+
+        & input[type='range'] {
+            position: inherit;
+            @include setSurface("container_lowest");
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: var(--global-radius);
+            cursor: pointer;
+
+            &:active,
+            &:focus {
+                &::after {
+                    display: block;
+                }
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 8px;
+                width: var(--slider-width);
+                border-radius: var(--global-radius);
+                @include setColor("primary");
+                z-index: $layer_1;
+            }
+
+            &:after {
+                content: "";
+                display: none;
+                position: absolute;
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                opacity: 20%;
+                top: -16px;
+                left: var(--slider-dot);
+                @include setColor($neutral);
+            }
+
+            &::-webkit-slider-thumb {
+                position: relative;
+                -webkit-appearance: none;
+                appearance: none;
+                @include setColor("primary");
+                width: 20px;
+                height: 20px;
+                border-radius: var(--global-radius);
+                cursor: pointer;
+                transition: all .3s ease;
+                z-index: $layer_1;
+            }
+        }
+
+        & input[type='number'] {
+            @include input();
+            margin: 0 16px;
+            max-width: 60px;
+            height: 40px;
+            text-align: center;
+            border-radius: var(--global-radius);
+        }
+    }
+
+    &[clean] {
+        & div[slider-container] input[type='number'] {
+            display: none;
+        }
+    }
+
+    &[progress] {
+        & div[slider-container] {
+            & input[type='range'] {
+                &::-webkit-slider-thumb {
+                    display: none;
+                }
+
+                &::after {
+                    display: none;
+                }
+            }
+
+            & input[type='number'] {
+                display: none;
+            }
+        }
+    }
+
+    &[thin] {
+        & div[slider-container] {
+
+            & input[type='range'] {
+                height: 2px;
+
+                &::before {
+                    height: 2px;
+                }
+
+                &:after {
+                    top: -20px;
+                }
+            }
+        }
+    }
+}
+
+@include darkmode() {
+    & div[obi-slider] {
+
+        & div[slider-container] {
+            & input[type='range'] {
+                @include setSurface("container_lowest", true);
+
+                &::before {
+                    @include setColor("primary", "dark");
+                }
+
+                &::-webkit-slider-thumb {
+                    @include setColor("primary", "dark");
+                }
+            }
+
+        }
+    }
+}

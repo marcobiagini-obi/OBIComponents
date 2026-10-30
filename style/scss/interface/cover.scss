@@ -1,0 +1,57 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+
+div[obi-cover] {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: auto;
+    border-radius: inherit;
+    height: 5em;
+    overflow: hidden;
+    @include variants();
+    @include sizes();
+
+    & img,
+    & iframe {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--global-radius);
+    }
+
+    & .title-cover {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        @include setColor($neutral_alt, "light_container");
+        opacity: 70%;
+    }
+
+    & div[obi-title] {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 16px;
+    }
+
+    &[fit] {
+
+        & img,
+        & iframe {
+            object-fit: contain;
+        }
+    }
+}
+
+@include darkmode() {
+    & div[obi-cover] {
+        @include variants(true);
+
+        & .title-cover {
+            @include setColor($neutral_alt, "dark_container");
+        }
+    }
+}

@@ -1,0 +1,442 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+$animation_timer: .1s;
+
+@mixin toggle {
+    &:active {
+        &>span[input] {
+            &::after {
+                height: 24px;
+                width: 24px;
+                margin-top: 7px;
+                margin-left: 7px;
+                @include setColor("primary");
+            }
+        }
+    }
+
+    &>span[input] {
+        line-height: 2.3;
+
+        &::before {
+            content: "";
+            width: 52px;
+            height: 32px;
+            border-radius: var(--global-radius);
+            @include setSurface("container_lowest");
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin-top: 11px;
+            margin-left: 7px;
+            border-radius: var(--global-radius);
+            height: 16px;
+            width: 16px;
+            @include setColor($neutral_alt);
+            transform: unset;
+            border: unset;
+            transition: margin $animation_timer ease, background-color $animation_timer linear, width $animation_timer ease, height $animation_timer ease;
+        }
+    }
+
+    &>input {
+
+        &:indeterminate,
+        &:checked {
+            &+span[input] {
+                &::before {
+                    @include setColor("primary");
+                }
+
+                &::after {
+                    height: 24px;
+                    width: 24px;
+                    margin-top: 7px;
+                    margin-left: 25px;
+                    @include setColor("primary", "on_light");
+                }
+            }
+        }
+    }
+}
+
+@mixin radio {
+    &>input {
+
+        &:indeterminate,
+        &:checked {
+            @include setColor("primary");
+
+            &+span[input] {
+                &::before {
+                    @include setText("primary");
+                    background-color: unset;
+                }
+
+                &::after {
+                    @include setText($neutral_alt, "on_light");
+                    @include setColor("primary");
+                    left: 7px;
+                }
+            }
+        }
+    }
+
+    &>[input] {
+
+        &::before {
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+
+        &::after {
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+            top: 7px;
+            left: 5px;
+            border: unset;
+            transform: unset;
+        }
+    }
+}
+
+@mixin button {
+    position: relative !important;
+
+    overflow: hidden;
+    display: flex;
+    flex-grow: unset;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: var(--global-radius);
+    padding: 0 16px;
+    height: 40px;
+    font-size: 1rem !important;
+    transition: box-shadow 150ms ease-in-out, filter 150ms ease-in-out, background-color 0.2s;
+    border: solid 1px;
+    @include setText($neutral_alt);
+
+    & span[input] {
+        margin: 0;
+
+        &::before {
+            display: none;
+        }
+
+        &::after {
+            margin: 8px 16px;
+        }
+    }
+
+    & input {
+
+        &:indeterminate,
+        &:checked {
+            &+span[input] {
+                padding-left: 32px;
+                @include setText($neutral_alt, "on_light");
+                @include setColor("primary");
+
+                &::after {
+                    @include setText("primary");
+                }
+            }
+        }
+    }
+}
+
+label[obi-checkbox] {
+    position: relative;
+    display: inline-block;
+    line-height: 1.5;
+    cursor: pointer;
+    @include unprintable();
+    @include disabled();
+
+    &:hover>input {
+        opacity: 0.04;
+
+        &:focus {
+            opacity: 0.16;
+        }
+    }
+
+
+    &>input {
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        z-index: -1;
+        position: absolute;
+        left: -9px;
+        top: -8px;
+        display: block;
+        margin: 0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        box-shadow: none;
+        outline: none;
+        opacity: 0;
+        transform: scale(1);
+        pointer-events: none;
+        transition: opacity 0.3s, transform 0.2s;
+
+        &:indeterminate,
+        &:checked {
+            @include setColor("primary");
+
+            &+span[input] {
+                &::before {
+                    @include setText("primary", "light");
+                    @include setColor("primary");
+                }
+
+                &::after {
+                    @include setText($neutral_alt, "on_light");
+                }
+            }
+
+            &:disabled+span[input]::before {
+                border-color: transparent;
+                background-color: currentColor;
+            }
+        }
+
+        &:indeterminate {
+            &+span[input]::after {
+                border-left: none;
+                transform: translate(4px, 3px);
+            }
+        }
+
+        &:focus {
+            opacity: 0.12;
+        }
+
+        &:active {
+            opacity: 1;
+            transform: scale(0);
+            transition: transform 0s, opacity 0s;
+
+            &+span[input]::before {
+                @include setText("primary");
+            }
+        }
+
+        &:checked {
+            &:active+span[input]::before {
+                border-color: transparent;
+                @include setColor("primary");
+            }
+        }
+
+        &:disabled {
+            opacity: 0;
+
+            &+span[input] {
+                opacity: 0.38;
+                cursor: initial;
+
+                &::before {
+                    border-color: currentColor;
+                }
+            }
+        }
+    }
+
+    &>span[input] {
+        margin-right: 8px;
+
+        &::before {
+            content: "";
+            display: inline-block;
+            box-sizing: border-box;
+            margin: 3px;
+            border: solid 2px;
+            /* Safari */
+            border-radius: 2px;
+            width: 18px;
+            height: 18px;
+            vertical-align: top;
+            transition: border-color 0.2s, background-color 0.2s;
+            @include setText($neutral_alt);
+        }
+
+        &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 5px;
+            border: solid 2px transparent;
+            border-right: none;
+            border-top: none;
+            transform: translate(3px, 4px) rotate(-45deg);
+        }
+    }
+
+    &[radio] {
+        @include radio();
+    }
+
+    &[toggle] {
+        @include toggle();
+
+        & input {
+            display: none;
+        }
+    }
+
+    &[button] {
+        @include button();
+
+        &:has(input:checked) {
+            @include setText("primary");
+        }
+
+        & input {
+            display: none;
+        }
+    }
+}
+
+@include darkmode() {
+
+    label[obi-checkbox] {
+
+        &>input {
+
+            &:indeterminate,
+            &:checked {
+                @include setColor("primary", "dark");
+
+                &+span[input] {
+                    &::before {
+                        @include setText("primary", "dark");
+                        @include setColor("primary", "dark");
+                    }
+
+                    &::after {
+                        @include setText($neutral_alt, "on_dark");
+                    }
+                }
+
+                &:disabled+span[input]::before {
+                    border-color: transparent;
+                    background-color: currentColor;
+                }
+            }
+
+            &:active {
+                &+span[input]::before {
+                    @include setText("primary", "dark");
+                }
+            }
+
+            &:checked {
+                &:active+span[input]::before {
+                    border-color: transparent;
+                    @include setColor("primary", "dark");
+                }
+            }
+        }
+
+        & span[input] {
+            &::before {
+                @include setText($neutral_alt, "dark");
+            }
+        }
+
+        &[radio] {
+
+            & input {
+
+                &:indeterminate,
+                &:checked {
+                    @include setColor("primary", "dark");
+
+                    &+span[input] {
+                        &::before {
+                            @include setText("primary", "dark");
+                            background-color: unset;
+                        }
+
+                        &::after {
+                            @include setText($neutral_alt, "on_dark");
+                            @include setColor("primary", "dark");
+                        }
+                    }
+                }
+            }
+        }
+
+        &[toggle] {
+            & span[input] {
+                &::before {
+                    @include setSurface("container_lowest", true);
+                }
+
+                &::after {
+                    @include setColor($neutral_alt, "dark");
+                }
+            }
+
+            &>input {
+
+                &:indeterminate,
+                &:checked {
+                    &+span[input] {
+                        &::before {
+                            @include setSurface("container_lowest", true);
+                        }
+
+                        &::after {
+                            @include setColor("primary", "dark");
+                        }
+                    }
+                }
+            }
+        }
+
+        &[button] {
+            @include setText($neutral_alt, "dark");
+
+            &:has(input:checked) {
+                @include setText("primary", "dark");
+            }
+
+            & span[input] {
+                @include setText($neutral_alt, "dark");
+            }
+
+            & input {
+
+                &:indeterminate,
+                &:checked {
+                    &+span[input] {
+                        padding-left: 24px;
+                        @include setText($neutral_alt, "on_dark");
+                        @include setColor("primary", dark);
+
+                        &::after {
+                            @include setText("primary", "dark");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

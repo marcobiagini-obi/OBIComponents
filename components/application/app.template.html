@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,-25" />
+    <link type='text/css' rel='stylesheet' href='../../style/StyleBundle.css'>
+    <script type='module' src='../../componentsBundle.js'></script>
+</head>
+
+<body>
+
+    <obi-app id="template" titolo="Test App Template" clean>
+        <div slot='tools' app-tools>
+            <app-search></app-search>
+            <obi-tasks></obi-tasks>
+            <obi-dashboard></obi-dashboard>
+            <app-settings>
+                <app-settings-list>
+                    <settings-item-darkmode></settings-item-darkmode>
+                    <settings-item-theme></settings-item-theme>
+                </app-settings-list>
+            </app-settings>
+        </div>
+        <app-user slot="user"></app-user>
+        <obi-nav slot="navigation">
+            <nav-item icona="home" titolo="Home" path="/home"></nav-item>
+            <nav-item icona="analytics" titolo="Analytics" path="/analytics"></nav-item>
+        </obi-nav>
+        <app-content gap="lg" display-column padding="md">
+            <obi-card titolo="Demo Layout" prepend="<obi-icon nome='table'></obi-icon>" ></obi-card>
+            <div display-grid gap="md">
+                <obi-card grid-size="3" titolo="Card 1" corpo="Contenuto della card 1" prepend="<obi-icon nome='account_balance'></obi-icon>" relevance="secondary"></obi-card>
+                <obi-card grid-size="3" titolo="Card 2" corpo="Contenuto della card 2" prepend="<obi-icon nome='account_balance'></obi-icon>" relevance="secondary"></obi-card>
+                <obi-card grid-size="3" titolo="Card 3" corpo="Contenuto della card 3" prepend="<obi-icon nome='account_balance'></obi-icon>" relevance="secondary"></obi-card>
+                <obi-card grid-size="3" titolo="Card 4" corpo="Contenuto della card 4" prepend="<obi-icon nome='account_balance'></obi-icon>" relevance="secondary"></obi-card>
+            </div>
+            <div display-grid="blog" gap="md">
+                <obi-card grid-article titolo="Blog Post 1" corpo="Contenuto del blog post 1" prepend="<obi-icon nome='article'></obi-icon>" relevance="tertiary"></obi-card>
+                <obi-card grid-quote titolo="Blog Post 2" corpo="Contenuto del blog post 2" prepend="<obi-icon nome='article'></obi-icon>" variant="filled"></obi-card>
+                <obi-card grid-fullpage titolo="Blog Post 3" corpo="Contenuto del blog post 3" prepend="<obi-icon nome='article'></obi-icon>"></obi-card>
+            </div>
+        </app-content>
+    </obi-app>
+
+    <script type="module">
+        import RenderEngine from "../../LAMP/RenderModule/LampRender.js";
+        import UserHandler from "../../LAMP/UserModule/LampAccess.js";
+        import { Support } from '../../LAMP/RenderModule/modules/library.js';
+
+        const users = [
+            { id: 2570, username: "agalli", nome: "Andrea", cognome: "Galli", email: "andrea.galli@obi-italia.it", ruolo: "admin" },
+            { id: 2571, username: "mbiagini1", nome: "Marco", cognome: "Biagini", email: "marco.biagini@obi-italia.it", ruolo: "admin" },
+            { id: 2573, username: "kamadori", nome: "Katia", cognome: "Amadori", email: "katia.amadori@obi-italia.it", ruolo: "user" },
+            { id: 2574, username: "bantonionli", nome: "Barbara", cognome: "Antoniolli", email: "barbara.antonioli@obi-italia.it", ruolo: "Controllo Fatture" },
+        ];
+
+        UserHandler.instance.login("mbiagini1", users.find(e => e.username == "mbiagini1"));
+
+        RenderEngine.instance.start("template").build({
+            dataset: {},
+            computed: {},
+            actions: {},
+            events: [],
+            settings: {}
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+@import "../.res/dataset.scss";
+
+
+@each $name, $size in $distance_sizes {
+    [margin='#{$name}'] {
+        margin: $size !important;
+    }
+
+    [margin-side='#{$name}'] {
+        margin: 0 $size !important;
+    }
+
+    [margin-topdown='#{$name}'] {
+        margin: $size 0 !important;
+    }
+
+    [padding='#{$name}'] {
+        padding: $size !important;
+    }
+
+    [padding-side='#{$name}'] {
+        padding: 0 $size !important;
+    }
+
+    [padding-topdown='#{$name}'] {
+        padding: $size 0 !important;
+    }
+
+    [gap='#{$name}'] {
+        gap: $size !important;
+    }
+}

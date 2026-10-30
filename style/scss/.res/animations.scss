@@ -1,0 +1,115 @@
+@mixin ripple() {
+
+    & span.ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        background-color: rgba(255, 255, 255, .5);
+        animation: ripple 600ms linear;
+    }
+
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+}
+
+@mixin rotate() {
+
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 4000ms;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+
+    -moz-animation-name: spin;
+    -moz-animation-duration: 4000ms;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+
+    -ms-animation-name: spin;
+    -ms-animation-duration: 4000ms;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: linear;
+
+    animation-name: spin;
+    animation-duration: 4000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+    @-ms-keyframes spin {
+        from {
+            -ms-transform: rotate(0deg);
+        }
+
+        to {
+            -ms-transform: rotate(360deg);
+        }
+    }
+
+    @-moz-keyframes spin {
+        from {
+            -moz-transform: rotate(0deg);
+        }
+
+        to {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes spin {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+@mixin shine() {
+    animation: 1.5s shine linear infinite;
+
+    @keyframes shine {
+        to {
+            background-position-x: -200%;
+        }
+    }
+}
+
+@mixin splashScreen() {
+    animation: slideRight 4s ease-in-out infinite;
+
+    @keyframes slideRight {
+
+        /* fully outside the left edge on start */
+        0% {
+            transform: translateX(calc(-100% - 50px));
+        }
+
+        30% {
+            transform: translateX(0);
+        }
+
+        70% {
+            transform: translateX(0);
+        }
+
+        /* move fully outside the right edge */
+        100% {
+            transform: translateX(calc(100% + 50px));
+        }
+    }
+}

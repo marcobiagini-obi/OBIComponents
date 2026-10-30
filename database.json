@@ -1,0 +1,320 @@
+{
+  "Users": [
+    {
+      "username": "mbiagini1",
+      "password": "",
+      "nome": "Marco",
+      "cognome": "Biagini",
+      "email": "marco.biagini@obi-italia.it",
+      "telefono": "+39-0574-5184-542",
+      "ruolo": "Specialista Analisi e Programmazione",
+      "reparto": "IT e Infrastrutture",
+      "area": "Area IT",
+      "negozi": [
+        {
+          "id": 3,
+          "nome": "003 Imola"
+        },
+        {
+          "id": 13,
+          "nome": "013 Roncadelle"
+        },
+        {
+          "id": 14,
+          "nome": "014 Castelfranco"
+        },
+        {
+          "id": 16,
+          "nome": "016 Malgrate"
+        },
+        {
+          "id": 17,
+          "nome": "017 Legnano"
+        },
+        {
+          "id": 18,
+          "nome": "018 Modena Est"
+        },
+        {
+          "id": 22,
+          "nome": "022 Rimini"
+        },
+        {
+          "id": 24,
+          "nome": "024 Fiorano"
+        },
+        {
+          "id": 25,
+          "nome": "025 Viterbo"
+        },
+        {
+          "id": 26,
+          "nome": "026 Ancona"
+        },
+        {
+          "id": 30,
+          "nome": "030 Reggio Emilia"
+        },
+        {
+          "id": 31,
+          "nome": "031 Latina"
+        },
+        {
+          "id": 38,
+          "nome": "038 Pesaro"
+        },
+        {
+          "id": 39,
+          "nome": "039 La Spezia"
+        },
+        {
+          "id": 41,
+          "nome": "041 Navacchio"
+        },
+        {
+          "id": 42,
+          "nome": "042 Pescara"
+        },
+        {
+          "id": 43,
+          "nome": "043 Montecatini"
+        },
+        {
+          "id": 44,
+          "nome": "044 Sesto Fiorentino"
+        },
+        {
+          "id": 45,
+          "nome": "045 Arezzo"
+        },
+        {
+          "id": 48,
+          "nome": "048 Ravenna"
+        },
+        {
+          "id": 51,
+          "nome": "051 Como"
+        },
+        {
+          "id": 53,
+          "nome": "053 Cuneo"
+        },
+        {
+          "id": 54,
+          "nome": "054 Curno"
+        },
+        {
+          "id": 55,
+          "nome": "055 San Giuliano Milanese"
+        },
+        {
+          "id": 56,
+          "nome": "056 Sona"
+        },
+        {
+          "id": 57,
+          "nome": "057 Affi"
+        },
+        {
+          "id": 58,
+          "nome": "058 Trento"
+        },
+        {
+          "id": 61,
+          "nome": "061 Novara"
+        },
+        {
+          "id": 62,
+          "nome": "062 Castenedolo"
+        },
+        {
+          "id": 64,
+          "nome": "064 Piacenza"
+        },
+        {
+          "id": 65,
+          "nome": "065 Carpi"
+        },
+        {
+          "id": 66,
+          "nome": "066 Avezzano"
+        },
+        {
+          "id": 67,
+          "nome": "067 Empoli"
+        },
+        {
+          "id": 68,
+          "nome": "068 Fidenza"
+        },
+        {
+          "id": 70,
+          "nome": "070 Romagnano Sesia"
+        },
+        {
+          "id": 72,
+          "nome": "072 Asti"
+        },
+        {
+          "id": 73,
+          "nome": "073 Somma Lombardo"
+        },
+        {
+          "id": 76,
+          "nome": "076 Mestre"
+        },
+        {
+          "id": 78,
+          "nome": "078 Guidonia"
+        },
+        {
+          "id": 80,
+          "nome": "080 Corciano"
+        },
+        {
+          "id": 84,
+          "nome": "084 Biella"
+        },
+        {
+          "id": 85,
+          "nome": "085 Tavagnacco"
+        },
+        {
+          "id": 86,
+          "nome": "086 Treviso"
+        },
+        {
+          "id": 87,
+          "nome": "087 Rivalta"
+        },
+        {
+          "id": 88,
+          "nome": "089 Montevarchi"
+        },
+        {
+          "id": 90,
+          "nome": "090 Prato"
+        },
+        {
+          "id": 91,
+          "nome": "091 Modena Ovest"
+        },
+        {
+          "id": 92,
+          "nome": "092 Magenta"
+        },
+        {
+          "id": 95,
+          "nome": "095 Lonato"
+        },
+        {
+          "id": 97,
+          "nome": "097 Civitanova Marche"
+        },
+        {
+          "id": 98,
+          "nome": "098 Casilina"
+        },
+        {
+          "id": 121,
+          "nome": "121 Livorno"
+        },
+        {
+          "id": 123,
+          "nome": "123 Trieste"
+        },
+        {
+          "id": 969,
+          "nome": "969 OBI E-Commerce IT"
+        }
+      ],
+      "fornitori": [],
+      "id": "1c6f"
+    }
+  ],
+  "Messages": [
+    {
+      "id": "1",
+      "nome": "mbiagini",
+      "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet ullamcorper nisl. Donec quam orci, cursus sed sapien vel, tincidunt tincidunt leo. Morbi sit amet interdum turpis. Duis aliquam neque vitae ante mollis, a rutrum nunc elementum.",
+      "timeStamp": "2024-03-22 12:30:00",
+      "insertTime": "2024-03-22 12:30:00",
+      "idOwner": 0,
+      "idLastUser": 0,
+      "attributi": [
+        {
+          "icona": "email",
+          "action": "email",
+          "title": "marco.biagini@obi-italia.it",
+          "params": {
+            "receiver": "marco.biagini@obi-italia.it;andrea.galli@obi-italia.it"
+          }
+        }
+      ],
+      "allegato": 0,
+      "profilo": ""
+    },
+    {
+      "id": "2",
+      "nome": "mbiagini",
+      "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet ullamcorper nisl. Donec quam orci, cursus sed sapien vel, tincidunt tincidunt leo. Morbi sit amet interdum turpis. Duis aliquam neque vitae ante mollis, a rutrum nunc elementum.",
+      "timeStamp": "2024-03-22 12:31:00",
+      "insertTime": "2024-03-22 12:31:00",
+      "idOwner": 0,
+      "idLastUser": 0,
+      "attributi": [],
+      "allegato": 0,
+      "profilo": ""
+    },
+    {
+      "id": "3",
+      "nome": "agalli",
+      "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet ullamcorper nisl.",
+      "timeStamp": "2024-04-13 14:12:00",
+      "insertTime": "2024-04-13 14:12:00",
+      "idOwner": 0,
+      "idLastUser": 0,
+      "attributi": [],
+      "allegato": 0,
+      "profilo": ""
+    },
+    {
+      "id": "4",
+      "nome": "agalli",
+      "note": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet ullamcorper nisl.",
+      "timeStamp": "2024-04-13 14:16:00",
+      "insertTime": "2024-04-13 14:16:00",
+      "idOwner": 0,
+      "idLastUser": 0,
+      "attributi": [],
+      "allegato": 0,
+      "profilo": ""
+    },
+    {
+      "id": "754g1r2z",
+      "note": "Ok, ci provo",
+      "nome": "mbiagini",
+      "allegato": null,
+      "timeStamp": "2024-07-02T14:34:13.818Z",
+      "attributi": [],
+      "id_allegato": 0,
+      "last": false,
+      "profilo": null,
+      "status": "sending",
+      "isSeparator": false
+    },
+    {
+      "id": "9yujs7kx",
+      "note": "",
+      "nome": "mbiagini",
+      "allegato": {},
+      "timeStamp": "2024-07-02T14:35:16.523Z",
+      "attributi": [],
+      "id_allegato": 0,
+      "last": false,
+      "profilo": null,
+      "status": "sending",
+      "isSeparator": false
+    }
+  ]
+}

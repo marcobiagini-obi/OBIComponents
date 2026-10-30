@@ -1,0 +1,42 @@
+div[obi-toolbar] {
+    display: flex;
+    flex-grow: unset;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: inherit;
+    font-size: .7rem !important;
+    width: 100%;
+
+    & section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-grow: 1;
+
+        &[position='start'] {
+            justify-content: flex-start;
+
+            &>* {
+                margin-right: 16px;
+            }
+        }
+
+        &[position='end'] {
+            justify-content: flex-end;
+
+            &>* {
+                margin-left: 16px;
+            }
+        }
+
+        &[position='center'] {
+            justify-content: center;
+
+            &>* {
+                margin: 0 16px;
+            }
+        }
+
+
+    }
+}

@@ -1,0 +1,66 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+obi-sideview,
+[obi-sideview] {
+    display: block;
+    max-width: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: width .5s ease;
+    border-radius: var(--global-radius);
+
+    @include relevance();
+    @include variants();
+
+    &[display] {
+        max-width: unset;
+        overflow: inherit;
+        visibility: visible;
+
+        @include media-breakpoint("lg", true) {
+            position: fixed !important;
+            top: 58px !important;
+            right: 0 !important;
+            height: 85vh !important;
+            z-index: $layer_3 !important;
+            border-radius: var(--global-radius) !important;
+            @include elevated();
+
+            &>[obi-card] {
+                margin: 0 !important;
+            }
+        }
+
+        @include media-breakpoint("md", true) {
+            top: 0 !important;
+            left: 0 !important;
+            width: auto !important;
+            min-width: unset !important;
+            max-width: unset !important;
+            height: 96vh !important;
+            overflow: auto !important;
+            margin: 16px;
+
+            &>*,
+            & [obi-card] {
+                min-width: unset !important;
+                max-width: 100% !important;
+                width: auto !important;
+            }
+        }
+    }
+
+    &:not([display]) {
+        min-width: unset !important;
+        visibility: visible !important;
+    }
+}
+
+@include darkmode() {
+
+    obi-sideview,
+    div[obi-sideview] {
+        @include variants(true);
+    }
+}

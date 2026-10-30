@@ -1,0 +1,380 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/input.scss";
+
+$input-radius: var(--global-radius);
+
+$text-align: center, end;
+
+div[obi-textbox],
+div[obi-textarea] {
+    position: relative;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin: 4px;
+
+    &[invalid] {
+        & [text-input] {
+            border-color: $danger;
+
+            & label {
+                @include setText($danger);
+            }
+        }
+    }
+
+    @include disabled() {
+
+        &:not([obi-textarea]) div[text-input] {
+            @include setSurface("dim");
+        }
+
+        & div[text-input] {
+            cursor: default;
+        }
+
+        & input {
+            cursor: not-allowed;
+        }
+    }
+
+    @include unprintable();
+
+    &[required] {
+        & label::after {
+            content: "*";
+            margin-left: 4px;
+        }
+    }
+
+    @each $position in $text-align {
+        &[text-align='#{$position}'] {
+            & input {
+                text-align: $position;
+            }
+        }
+    }
+
+    &[variant='filled'] {
+        & div[text-input] {
+            @include setSurface("bright");
+
+            & label {
+                height: 47px;
+            }
+        }
+    }
+
+    &[variant='outlined'] {
+        margin-top: 18px;
+
+        & div[text-input] {
+            padding: 0;
+            border-bottom: unset;
+            background-color: unset !important;
+
+            &:focus {
+                @include setColor("primary");
+            }
+
+            & div[text-indicator] {
+                display: none;
+            }
+
+            & label {
+                padding: 0 4px;
+                left: 12px;
+                top: 0;
+                border-radius: 8px;
+                height: 47px;
+            }
+
+            & input {
+                background-color: unset !important;
+                border: 1px solid $neutral_alt;
+                border-radius: $input-radius;
+                margin: 0 !important;
+                height: 47px !important;
+                padding: 0 8px;
+
+                &:not([empty]),
+                &:focus,
+                &[placeholder] {
+
+                    &~label {
+                        top: -12px;
+                        padding: 4px;
+                        @include setColor("primary");
+                        left: 12px;
+                        opacity: 1;
+                    }
+                }
+
+                &:focus {
+                    @include setSurface("container");
+                    border-color: getGlobalColor("primary");
+                }
+            }
+        }
+    }
+
+    & div[text-input] {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        flex-direction: row;
+        flex-grow: 1;
+        border-radius: $input-radius $input-radius 0 0;
+        border-bottom: 1px solid $neutral_alt;
+        // @include setSurface("container");
+        min-height: 47px;
+        padding-top: 8px;
+        cursor: text;
+
+        & div[prepend] {
+            padding-left: 12px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+
+            & .material-icons {
+                font-size: 24px;
+            }
+
+            &~label {
+                left: 60px;
+            }
+        }
+
+        & div[append] {
+            padding-right: 12px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+
+            & .material-icons {
+                font-size: 24px;
+            }
+        }
+
+        &:has(> input:invalid, > input[invalid]) {
+            border-color: $danger;
+        }
+
+        /* LABEL ======================================= */
+        & label {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include body_large();
+            pointer-events: none;
+            white-space: nowrap;
+            transition: height .2s ease, font-size .2s ease;
+            top: 8px;
+            left: 16px;
+            height: 55px;
+            color: $neutral;
+            opacity: $default_opacity;
+        }
+
+        & input {
+            margin: 0 16px;
+            height: 36px;
+
+            &:invalid,
+            &[invalid] {
+                &~label {
+                    @include setText($danger);
+                }
+            }
+
+            @include input();
+            @include body_large();
+        }
+
+        & input,
+        & div[contenteditable='true'] {
+
+            &:not([empty]),
+            &:focus {
+
+                &~label {
+                    @include body_small();
+                    height: .875rem;
+                    opacity: 1;
+                }
+            }
+
+            &:focus {
+                &~div[text-indicator] {
+                    width: 100%;
+                    @include setColor("primary");
+                }
+
+                &~label {
+                    color: getGlobalColor("primary");
+                }
+            }
+        }
+
+        & div[contenteditable='true'] {
+            @include input();
+            @include body_large();
+            margin: 20px 16px 9px 16px;
+            flex-grow: 1;
+            z-index: $layer_1;
+        }
+
+        &>span[placeholder] {
+            position: absolute;
+            top: 28px;
+            left: 16px;
+            opacity: 50%;
+            font-size: 1em;
+        }
+
+        & [text-indicator] {
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -1px;
+            left: 0;
+            transition: width .2s ease;
+            @include setSurface("outline");
+        }
+    }
+
+    & div[text-support] {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        & span[message] {
+            margin: 0 16px;
+            margin-top: 4px;
+            flex-grow: 1;
+            text-align: left;
+            @include body_small();
+        }
+
+        & span[counter] {
+            margin: 0 16px;
+            margin-top: 4px;
+            flex-grow: unset;
+        }
+    }
+}
+
+div[obi-textarea] {
+    border-radius: var(--global-radius) var(--global-radius) 0 0;
+
+    & div[text-format] {
+        background: rgba($color: #000000, $alpha: 0.2);
+    }
+
+    & div[text-input] {
+        align-items: flex-start;
+    }
+}
+
+[group-component] {
+
+    & [obi-textbox],
+    [obi-textarea] {
+        margin: 0 !important;
+
+        & [text-input] {
+            border-radius: 0;
+        }
+
+        &[variant='outlined'] {
+            & input {
+                border-radius: 0 !important;
+            }
+
+            &+[obi-button] {
+                min-height: 49px;
+            }
+        }
+
+        &+[obi-button] {
+            min-height: 56px;
+        }
+    }
+
+    &>[obi-textbox]:last-child,
+    >[obi-textarea]:last-child {
+        & [text-input] {
+            border-radius: 0 var(--global-radius) 0 0;
+        }
+
+        &[variant='outlined'] {
+            & input {
+                border-radius: 0 var(--global-radius) var(--global-radius) 0 !important;
+            }
+        }
+    }
+
+    &>[obi-textbox]:first-child,
+    >[obi-textarea]:first-child {
+        & [text-input] {
+            border-radius: var(--global-radius) 0 0 0;
+        }
+
+        &[variant='outlined'] {
+            & input {
+                border-radius: var(--global-radius) 0 0 var(--global-radius) !important;
+            }
+        }
+    }
+}
+
+@include darkmode() {
+
+    & div[obi-textbox],
+    [obi-textarea] {
+
+        &[variant='filled'] {
+            & div[text-input] {
+                @include setSurface("bright", true);
+            }
+        }
+
+        &[variant='outlined'] {
+            & div[text-input] {
+                & input {
+
+                    &:focus {
+                        @include setSurface("container", true);
+                        border-color: getGlobalColor("primary") !important;
+                    }
+
+                    &:invalid {
+                        &~label {
+                            @include setColor("primary", "dark");
+                        }
+                    }
+                }
+            }
+        }
+
+        & div[text-input] {
+            @include setSurface("container", true);
+
+            & input {
+                &:invalid {
+                    &~label {
+                        @include setText($danger, "dark");
+                    }
+                }
+            }
+
+            & [text-indicator] {
+                @include setColor("primary", "dark");
+            }
+        }
+    }
+}

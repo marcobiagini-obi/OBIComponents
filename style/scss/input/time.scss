@@ -1,0 +1,122 @@
+@import "../.res/shadows.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+div[obi-time] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    padding-top: 16px;
+    border-radius: var(--global-radius);
+
+    @include variants();
+    @include relevance();
+
+    &[disabled] {
+        & div[text-input] {
+            opacity: 50%;
+            cursor: not-allowed;
+
+        }
+
+        &>[obi-button] {
+            opacity: 50%;
+            cursor: not-allowed;
+        }
+    }
+
+    & div[obi-textbox] {
+        width: 50px;
+
+        & [text-input] {
+            height: 45px;
+            padding: 0;
+
+            & input {
+                width: 40px;
+                margin: 8px;
+            }
+
+            & label {
+                font-weight: normal;
+                font-size: 0.875rem;
+                letter-spacing: 0.25px;
+                height: .875rem;
+                opacity: 1;
+                position: absolute;
+                top: -15px;
+                left: 0;
+            }
+
+            & div[append] {
+                padding-right: 0;
+            }
+        }
+    }
+
+    & [obi-icon] span {
+        font-size: .9em;
+    }
+
+    & div[time-selector] {
+        display: flex;
+        flex-direction: row;
+        border-radius: var(--global-radius);
+        @include setSurface("container_highest");
+        height: 345px;
+
+        &>div {
+            display: flex;
+            flex-direction: column;
+            margin: 16px;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            // &[display] {
+            //     display: flex;
+            // }
+
+            & label {
+                padding: 8px;
+                border-radius: var(--global-radius);
+
+                &[current] {
+                    @include setSurface("default");
+                }
+
+                &:hover {
+                    @include setSurface("container");
+                    cursor: pointer;
+                }
+            }
+        }
+
+    }
+}
+
+
+@include darkmode() {
+    div[obi-time] {
+        @include variants(true);
+
+        & div[time-selector] {
+            @include setSurface("container_highest", true);
+
+            &>div {
+                & label {
+                    &[current] {
+                        @include setSurface("default", true);
+                    }
+
+                    &:hover {
+                        @include setSurface("container", true);
+                    }
+                }
+            }
+        }
+    }
+}

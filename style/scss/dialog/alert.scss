@@ -1,0 +1,242 @@
+@import "../.res/dataset.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+$_animation_in: .5s;
+$_animation_out: .7s;
+
+@mixin types($set) {
+    &[type='success'] {
+        // border: solid 1px;
+        // @include setOutline($success, $set, $color_set);
+
+        @if $set =="light" {
+            @include setSurface("dim");
+        }
+
+        @else {
+            @include setSurface("bright", true);
+        }
+
+        & span[icona] {
+            @include setOutline($success, $set);
+        }
+    }
+
+    &[type='warning'] {
+        // border: solid 1px;
+        // @include setOutline($warning, $set, $color_set);
+
+        @if $set =="light" {
+            @include setSurface("dim");
+        }
+
+        @else {
+            @include setSurface("bright", true);
+        }
+
+        & span[icona] {
+            @include setOutline($warning, $set, $color_set);
+        }
+    }
+
+    &[type='error'] {
+        // border: solid 1px;
+        // @include setOutline($danger, $set, $color_set);
+
+        @if $set =="light" {
+            @include setSurface("dim");
+        }
+
+        @else {
+            @include setSurface("bright", true);
+        }
+
+        & span[icona] {
+            @include setOutline($danger, $set);
+        }
+    }
+
+    &[type='debug'] {
+        border: solid 1px;
+        @include setOutline($neutral_alt, $set);
+
+        @if $set =="light" {
+            @include setSurface("dim");
+        }
+
+        @else {
+            @include setSurface("bright", true);
+        }
+
+        & span[icona] {
+            @include setOutline($neutral_alt, $set);
+        }
+    }
+}
+
+div[alert-area] {
+    position: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    z-index: $layer_4;
+
+    @include media-breakpoint("md", true) {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+div[obi-alert] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 600px;
+    padding: 16px;
+    margin: 24px;
+    border-radius: var(--global-radius);
+    @include setSurface("bright", true);
+    @include elevated();
+
+    animation: fade-in ease $_animation_in forwards;
+
+    @include media-breakpoint("md", true) {
+        animation: fade-in-sm ease $_animation_in forwards;
+    }
+
+    &[closing] {
+        animation: fade-out ease $_animation_out forwards;
+
+        @include media-breakpoint("md", true) {
+            animation: fade-out-sm ease $_animation_out forwards;
+        }
+    }
+
+    & span[icona] {
+        font-size: 2em;
+        padding-right: 16px;
+    }
+
+    div[content] {
+        display: flex;
+        flex-grow: 1;
+        flex-wrap: wrap;
+        align-items: center;
+
+        & div[text] {
+            flex-grow: 1;
+            padding: 0 var(--global-padding);
+            min-height: 48px;
+            min-width: 60%;
+            display: flex;
+        }
+
+        & div[actions] {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            height: 48px;
+
+            &>button {
+                margin: 0 4px;
+            }
+        }
+    }
+
+    & button {
+        @include setOutline("primary", "dark");
+        @include relevance("dark_container");
+
+        &[chiudi] {
+            font-size: 48px !important;
+            @include setOutline($neutral, "on_light");
+        }
+    }
+
+    @include types("dark");
+
+    @include media-breakpoint("lg", true) {
+        width: 700px;
+    }
+
+    @include media-breakpoint("md", true) {
+        width: 90%;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        margin-right: -750px;
+    }
+
+    90% {
+        margin-right: 40px;
+    }
+
+    100% {
+        margin-right: 24px;
+    }
+}
+
+@keyframes fade-in-sm {
+    0% {
+        margin-bottom: -300px;
+    }
+
+    90% {
+        margin-bottom: 40px;
+    }
+
+    100% {
+        margin-bottom: 24px;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        margin-right: 24px;
+    }
+
+    10% {
+        margin-right: 40px;
+    }
+
+    100% {
+        margin-right: -750px;
+    }
+}
+
+@keyframes fade-out-sm {
+    0% {
+        margin-bottom: 24px;
+    }
+
+    10% {
+        margin-bottom: 40px;
+    }
+
+    100% {
+        margin-bottom: -300px;
+    }
+}
+
+@include darkmode() {
+    div[obi-alert] {
+        @include setSurface("dim");
+        @include types("light");
+
+        & button {
+            @include setOutline("primary", "light");
+            @include relevance("light_container");
+
+            &[chiudi] {
+                @include setOutline($neutral, "on_dark");
+            }
+        }
+    }
+}

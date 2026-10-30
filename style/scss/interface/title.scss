@@ -1,0 +1,30 @@
+@import "../.res/variants.scss";
+
+div[obi-title] {
+    display: flex;
+    flex-direction: column;
+    font-size: 1em;
+    overflow: hidden;
+    @include obi-font();
+    @include sizes();
+
+    &[reverse] {
+        flex-direction: column-reverse;
+    }
+
+    & span:nth-child(1) {
+        font-size: 1.2em;
+        line-height: 1.5em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    & span:nth-child(2) {
+        font-size: .8em;
+        white-space: nowrap;
+        filter: opacity(.6);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

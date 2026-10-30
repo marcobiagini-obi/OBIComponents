@@ -1,0 +1,307 @@
+@import "./.res/colors.scss";
+@import "./.res/variants.scss";
+@import "./.res/dataset.scss";
+@import "./.res/loader.scss";
+
+$selected: "container_highest";
+$table_sizes: "xs" small 32px,
+    "sm" medium 40px,
+    "md" 1em 48px,
+    "lg" large 56px,
+    "xl" larger 64px;
+
+@mixin cells {
+    position: relative;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+    padding: 6px 8px;
+    padding-left: 24px;
+    padding-right: 32px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 320px;
+    overflow: hidden;
+
+    &:last-child {
+        padding-right: 16px;
+    }
+}
+
+[obi-table] {
+    overflow: unset;
+    display: inline-flex;
+    flex-direction: column;
+    border-radius: var(--global-radius);
+    // max-width: 85vw;
+    flex-grow: 1;
+    @include loader();
+    @include skeleton();
+
+    @each $name, $color in $palette {
+        &[alternate='#{$name}'] {
+            & table thead th {
+                @include setText($color);
+            }
+
+            & table tbody tr {
+                border-bottom: unset;
+
+                &:nth-child(2n) {
+                    @include setColor($color, "light_container");
+
+                    &[active] {
+                        @include setColor("primary");
+                    }
+                }
+            }
+        }
+    }
+
+    &.hide-filters {
+        & [table-filters] {
+            display: none;
+        }
+    }
+
+    &[interact] {
+        & table tbody tr:hover {
+            @include setSurface("dim");
+            cursor: pointer;
+        }
+    }
+
+    & table {
+        display: table;
+        border-radius: var(--global-radius);
+        text-indent: unset;
+        min-width: 100%;
+        flex-grow: 1;
+        border-collapse: collapse;
+        border-spacing: initial;
+        max-width: 100%;
+        overflow: hidden;
+
+        & thead,
+        & tbody {
+            & tr {
+                display: table-row;
+                vertical-align: inherit;
+                border-bottom: solid 1px $neutral_alt;
+
+                & td {
+                    height: inherit;
+
+                    &[type='number'] {
+                        text-align: right;
+                    }
+
+                    &[type='code'],
+                    &[type='boolean'],
+                    &[type='image'],
+                    &[type='icon'],
+                    &[type='function'] {
+                        text-align: center;
+                    }
+
+                    // &[type='array'] {
+                    //     overflow: auto;
+                    // }
+                }
+
+                &:has(td[type='select'] input:checked) {
+                    @include setSurface($selected);
+                }
+
+                &[active] {
+                    @include setColor("primary");
+                }
+            }
+
+            & div[obi-checkbox] {
+
+                & input {
+                    &:checked+span {
+                        opacity: 1;
+                    }
+                }
+
+                & span {
+                    opacity: .6;
+                }
+            }
+        }
+
+        & thead {
+            display: table-header-group;
+            border-bottom: solid 1px;
+            border-radius: var(--global-radius);
+            position: sticky;
+            top: 0;
+            z-index: $layer_1;
+            @include setSurface("container");
+
+            & tr {
+                height: 56px;
+                padding: 8px;
+            }
+
+            & th {
+                @include cells();
+                cursor: pointer;
+
+                & .material-symbols-outlined {
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    margin-top: -12px;
+
+                    &[prepend] {
+                        margin-left: -24px;
+                    }
+                }
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        & tbody {
+            & td {
+                @include cells();
+
+                &[type='number'] {
+                    text-align: right;
+                }
+
+                &[type='code'],
+                &[type='icon'] {
+                    text-align: center;
+                    width: 1%;
+                    white-space: nowrap;
+                }
+            }
+
+            & tr {
+                height: 52px;
+            }
+        }
+    }
+
+    & div[table-pager] {
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        & [obi-select] [floating-item] {
+            bottom: 100%;
+            left: 0;
+        }
+
+        &>* {
+            margin: 8px;
+        }
+    }
+
+    & [table-data-container] {
+        width: 100%;
+        overflow: auto;
+    }
+
+    & [table-filters] {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 8px 0;
+    }
+
+    &[filter-collapse] {
+
+        & [filter-form] {
+            overflow: hidden;
+            max-height: 0;
+            border: unset !important;
+        }
+    }
+
+    @each $size, $font-size, $height in $table_sizes {
+        &[size='#{$size}'] {
+            & table {
+                font-size: $font-size !important;
+
+                & thead th {
+                    height: $height !important;
+                }
+
+                & tbody tr {
+                    height: $height !important;
+                }
+            }
+        }
+    }
+}
+
+@include darkmode() {
+    & [obi-table] {
+
+        @each $name, $color in $palette {
+            &[alternate='#{$name}'] {
+                & table thead th {
+                    @include setText($color, "dark");
+                }
+
+                & table tbody tr {
+                    border-bottom: unset;
+
+                    &:nth-child(2n) {
+                        @include setColor($color, "dark_container");
+
+                        &[active] {
+                            @include setColor("primary", "dark");
+                        }
+                    }
+                }
+            }
+        }
+
+        & table {
+            & thead {
+                @include setSurface("container", true);
+            }
+
+            & tbody {
+                & tr {
+                    & td {
+                        &[type='array'] {
+                            & select {
+                                & option {
+                                    all: unset;
+                                    @include setSurface("bright", true);
+                                }
+                            }
+                        }
+                    }
+
+                    &:has(td[type='select'] input:checked) {
+                        @include setSurface($selected, true);
+                    }
+
+                    &[active] {
+                        @include setColor("primary", "dark");
+                    }
+                }
+            }
+        }
+
+        &[interact] {
+            & table tbody tr:hover {
+                @include setSurface("dim", true);
+                cursor: pointer;
+            }
+        }
+    }
+}

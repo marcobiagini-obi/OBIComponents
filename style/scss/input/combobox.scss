@@ -1,0 +1,56 @@
+@import "../.res/variants.scss";
+
+div[obi-combobox] {
+    @include disabled();
+    @include unprintable();
+    @include sizes();
+
+    &>div[obi-list] {
+        max-height: 360px;
+        overflow: auto;
+    }
+
+    &[input-mode='notext'] {
+        & div[obi-textbox] {
+            @include disabled();
+
+            & input {
+                pointer-events: none;
+            }
+        }
+    }
+
+    &[float-container='show'] {
+        & div[text-input]:not(:has(div[append])) {
+
+            &::after {
+                position: absolute;
+                right: 0;
+                content: "\e5c7";
+                font-family: 'Material Symbols Outlined';
+                font-size: 2em;
+            }
+        }
+    }
+
+    &[float-container='hide'] {
+        & div[text-input]:not(:has(div[append])) {
+
+            &::after {
+                position: absolute;
+                right: 0;
+                content: "\e5c5";
+                font-family: 'Material Symbols Outlined';
+                font-size: 1.7em;
+            }
+        }
+    }
+}
+
+[group-component] {
+    & [obi-combobox] {
+        &+[obi-button] {
+            min-height: 56px;
+        }
+    }
+}

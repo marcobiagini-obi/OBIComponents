@@ -1,0 +1,235 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+@font-face {
+    font-family: OBIFont;
+    src: url(../../../resources/Obi-Regular.ttf);
+}
+
+:root {
+    --global-radius: 8px;
+    --global-animation: 3s;
+    --global-font: "Roboto", sans-serif;
+    @include defineColor("brand", #FF7E21);
+    @include defineColor("primary", #69461E);
+    @include defineColor("secondary", #61574C);
+    @include defineColor("tertiary", #1A406B);
+}
+
+div:has(>[display-grid]),
+section:has(>[display-grid]),
+div:has(>[small-container]),
+section:has(>[small-container]) {
+    @supports (container: parent / inline-size) {
+        container: parent / inline-size;
+    }
+
+    @supports not (container: parent / inline-size) {
+        display: inline-block;
+        width: 100%;
+    }
+}
+
+body {
+    // @include obi-font();
+    font-family: var(--global-font);
+    font-size: 18px;
+    letter-spacing: 0.15px;
+    font-weight: normal;
+    padding: 0;
+    margin: 0;
+    //height: 100vh;
+    @include setSurface("default");
+}
+
+.new-line {
+    white-space: pre-line !important;
+}
+
+[new-line] {
+    white-space: pre !important;
+}
+
+section {
+    display: flex;
+    padding: var(--global-padding);
+}
+
+hr {
+    @include setColor($neutral);
+    margin: 4px 16px 8px 0;
+    opacity: .3;
+
+    &[full] {
+        margin: 4px 0 8px 0;
+    }
+
+    &[middle] {
+        margin: 4px 16px 8px 16px;
+    }
+
+    &[column] {
+        height: 100%;
+        width: 1px;
+    }
+}
+
+div {
+    position: relative;
+    //     @include variants();
+}
+
+section,
+div,
+span,
+code {
+    @include relevance();
+}
+
+section {
+    @include variants();
+
+    &[variant='filled']:not([relevance]) {
+        @include setSurface("bright");
+    }
+}
+
+[group-component] {
+    @include variants();
+
+    & input,
+    & select,
+    & textarea,
+    & button {
+        max-width: unset;
+    }
+}
+
+[float-container='show'][disabled] {
+    & [floating-item] {
+        display: none !important;
+    }
+}
+
+[floating-item] {
+    z-index: $layer_2;
+}
+
+[no-print] {
+    @include unprintable();
+}
+
+[rounded] {
+    border-radius: var(--global-radius) !important;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+[interactable] {
+    &:hover {
+        cursor: pointer;
+        filter: brightness(0.9);
+    }
+}
+
+@include darkmode() {
+    @include setSurface("default", true);
+
+    [interactable] {
+        &:hover {
+            cursor: pointer;
+            filter: brightness(1.1);
+        }
+    }
+
+    section,
+    div,
+    span {
+        @include relevance("dark_container");
+    }
+
+    section {
+        @include variants(true);
+
+        &[variant='filled']:not([relevance]) {
+            @include setSurface("bright", true);
+        }
+    }
+
+    [group-component] {
+        @include variants(true);
+    }
+}
+
+@include media-breakpoint('sm', true) {
+    [floating-item] {
+        position: fixed !important;
+        right: 0 !important;
+        left: 0 !important;
+        margin: 8px !important;
+        width: 96vw !important;
+        max-height: 85vh !important;
+    }
+}
+
+// @each $name,
+// $color,
+// $dark in $palette {
+//     .bg-#{$name} {
+//         background-color: getGlobalColor($name, $lightness($color_set, "light"));
+//     }
+
+//     .bd-#{$name} {
+//         border-style: solid;
+//         border-width: 1px;
+//         border-radius: 16px;
+//         background-color: getGlobalColor($name, $lightness($color_set, "light"));
+//     }
+
+//     .txt-#{$name} {
+//         color: $color !important;
+//     }
+
+//     @include darkmode() {
+//         & .bg-#{$name} {
+//             @include setColor($dark, true);
+//         }
+
+//         & .bd-#{$name} {
+//             border-color: $dark !important;
+//         }
+
+//         & .txt-#{$name} {
+//             color: $dark !important;
+//         }
+//     }
+// }
+
+// $mdc-typography-styles-headline1: (font-family: unquote("Roboto"),
+//     font-size: 96);
+// $mdc-typography-styles-headline2: (font-family: unquote("Roboto"),
+//     font-size: 60);
+// $mdc-typography-styles-headline3: (font-family: unquote("Roboto"),
+//     font-size: 48);
+// $mdc-typography-styles-headline4: (font-family: unquote("Roboto"),
+//     font-size: 34);
+// $mdc-typography-styles-headline5: (font-family: unquote("Roboto"),
+//     font-size: 24);
+// $mdc-typography-styles-headline6: (font-family: unquote("Roboto"),
+//     font-size: 20);
+// $mdc-typography-styles-body1: (font-family: unquote("Roboto"),
+//     font-size: 16);
+// $mdc-typography-styles-body2: (font-family: unquote("Roboto"),
+//     font-size: 14);
+// $mdc-typography-styles-subtitle1: (font-family: unquote("Roboto"),
+//     font-size: 16);
+// $mdc-typography-styles-subtitle2: (font-family: unquote("Roboto"),
+//     font-size: 14);
+// $mdc-typography-styles-button: (font-family: unquote("Roboto"),
+//     font-size: 14);
+// $mdc-typography-styles-overline: (font-family: unquote("Roboto"),
+//     font-size: 10);
+// $mdc-typography-styles-caption: (font-family: unquote("Roboto"),
+//     font-size: 12);

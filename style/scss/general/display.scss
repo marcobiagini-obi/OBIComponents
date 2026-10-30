@@ -1,0 +1,200 @@
+@use 'sass:list';
+@import "../.res/variants.scss";
+@import "../.res/dataset.scss";
+
+
+@mixin flexrow {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    @include flexsizing();
+
+    @each $place, $attr in $flex_positions {
+        &[flex-align='#{$place}'] {
+            justify-content: $attr !important;
+        }
+    }
+
+    &[flex-top] {
+        align-items: flex-start;
+    }
+
+    &[flex-bottom] {
+        align-items: flex-end;
+    }
+
+    &[flex-stretch] {
+        align-items: stretch;
+    }
+
+    &[hidden] {
+        display: none !important;
+    }
+}
+
+[display-row] {
+    @include flexrow();
+
+    &>[obi-card] {
+        margin: unset;
+    }
+}
+
+[display-row='reverse'] {
+    @include flexrow();
+    flex-direction: row-reverse !important;
+}
+
+[display-row="wrap"] {
+    @include flexrow();
+    flex-wrap: wrap !important;
+    overflow: unset !important;
+}
+
+[display-column] {
+    display: flex !important;
+    flex-direction: column !important;
+    @include flexsizing();
+
+    @each $place, $attr in $flex_positions {
+        &[flex-align='#{$place}'] {
+            align-items: $attr !important;
+        }
+    }
+
+    &[flex-stretch] {
+        justify-content: stretch;
+    }
+
+    &[hidden] {
+        display: none !important;
+    }
+
+    &[group-component] {
+        &>*:first-child {
+            border-radius: var(--global-radius) var(--global-radius) 0 0 !important;
+        }
+
+        &>*:last-child {
+            border-radius: 0 0 var(--global-radius) var(--global-radius) !important;
+        }
+    }
+
+    &>[obi-card] {
+        margin: unset;
+    }
+}
+
+[display-grid] {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+    @for $size from 1 through 12 {
+
+        & [grid-start='#{$size}'] {
+            grid-column-start: $size;
+        }
+
+        & [grid-size='#{$size}'] {
+            grid-column-end: span $size;
+        }
+    }
+
+    &[hidden] {
+        display: none !important;
+    }
+
+    &>[obi-card] {
+        margin: unset;
+    }
+
+    // @include media-breakpoint("md", true) {
+    //     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    // }
+}
+
+[display-grid='blog'] {
+    display: grid !important;
+    grid-template-columns: [#{list.nth($grid_lines, 1)}] 15% [#{list.nth($grid_lines, 2)}] 50px [#{list.nth($grid_lines, 3)}] 1fr [#{list.nth($grid_lines, 4)}] 1fr [#{list.nth($grid_lines, 5)}] 50px [#{list.nth($grid_lines, 6)}] 15% [#{list.nth($grid_lines, 7)}];
+    column-gap: 8px;
+
+    & [grid-fullpage] {
+        grid-column-start: #{list.nth($grid_lines, 1)};
+        grid-column-end: #{list.nth($grid_lines, 7)};
+    }
+
+    & [grid-article] {
+        grid-column-start: #{list.nth($grid_lines, 3)};
+        grid-column-end: #{list.nth($grid_lines, 5)};
+    }
+
+    & [grid-quote] {
+        grid-column-start: #{list.nth($grid_lines, 2)};
+        grid-column-end: #{list.nth($grid_lines, 6)};
+    }
+
+    @each $line in $grid_lines {
+        & [grid-start='#{$line}'] {
+
+            grid-column-start: $line;
+
+            @for $size from 1 through $grid_size {
+                &[grid-size='#{$size}'] {
+                    grid-column-end: span $size;
+                }
+            }
+
+            @each $name in $grid_lines {
+                &[grid-end='#{$name}'] {
+                    grid-column-end: span $name;
+                }
+            }
+        }
+    }
+
+    // @include media-breakpoint("md", true) {
+    //     grid-template-columns: [#{list.nth($grid_lines, 1)}] auto [#{list.nth($grid_lines, 2)}] 10px [#{list.nth($grid_lines, 3)}] 1fr [#{list.nth($grid_lines, 4)}] 1fr [#{list.nth($grid_lines, 5)}] 10px [#{list.nth($grid_lines, 6)}] auto [#{list.nth($grid_lines, 7)}];
+    // }
+
+    &[hidden] {
+        display: none !important;
+    }
+}
+
+@container parent (width <=#{$screen_md}) {
+
+    [display-grid] {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+
+        &>[grid-size='12'],
+        &>[grid-size='11'],
+        &>[grid-size='10'],
+        &>[grid-size='9'],
+        &>[grid-size='8'],
+        &>[grid-size='7'],
+        &>[grid-size='6'],
+        &>[grid-size='5'] {
+            grid-column-start: 0;
+            grid-column-end: span 6;
+        }
+
+        &>[grid-size='4'] {
+            grid-column-start: 1;
+        }
+    }
+
+    [display-grid='blog'] {
+        grid-template-columns: [#{list.nth($grid_lines, 1)}] auto [#{list.nth($grid_lines, 2)}] 10px [#{list.nth($grid_lines, 3)}] 1fr [#{list.nth($grid_lines, 4)}] 1fr [#{list.nth($grid_lines, 5)}] 10px [#{list.nth($grid_lines, 6)}] auto [#{list.nth($grid_lines, 7)}];
+    }
+}
+
+@media (max-width: $screen_sm) {
+
+    [display-grid] {
+        grid-template-columns: 1fr;
+    }
+
+    [display-grid='blog'] {
+        grid-template-columns: [#{list.nth($grid_lines, 1)}] auto [#{list.nth($grid_lines, 2)}] 0px [#{list.nth($grid_lines, 3)}] 1fr [#{list.nth($grid_lines, 4)}] 1fr [#{list.nth($grid_lines, 5)}] 0px [#{list.nth($grid_lines, 6)}] auto [#{list.nth($grid_lines, 7)}];
+    }
+}

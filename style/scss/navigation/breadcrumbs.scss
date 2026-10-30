@@ -1,0 +1,46 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+ul[obi-breadcrumbs] {
+    appearance: unset;
+    -webkit-appearance: unset;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 8px;
+    margin: 0;
+    border-radius: var(--global-radius);
+    @include unprintable();
+    @include sizes();
+    z-index: $layer_3;
+
+    & li {
+        display: inline;
+        padding-right: 8px;
+
+        &+li::before {
+            content: "/\00a0";
+        }
+
+        /* Add a color to all links inside the list */
+        & a {
+            @include setText("primary", "light");
+            text-decoration: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+@include darkmode() {
+    & ul[obi-breadcrumbs] {
+        & li {
+            & a {
+                @include setText("primary", "dark");
+            }
+        }
+    }
+}

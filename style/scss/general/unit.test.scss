@@ -1,0 +1,26 @@
+        #unit_test {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            & .test-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                grid-gap: 8px;
+
+                &.success {
+                    & .material-symbols-outlined {
+                        color: green;
+                    }
+                }
+
+                &.error {
+                    & .material-symbols-outlined {
+                        color: red;
+                    }
+
+                }
+            }
+        }

@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "meta-viewport": "off",
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "@property"
+        ]
+      }
+    ]
+  },
+  "browserslist": [
+    "defaults",
+    "not ie 11",
+    "not and_ff <= 127",
+    "not firefox <= 127"
+  ]
+}

@@ -1,0 +1,58 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+div[obi-chip] {
+    display: flex;
+    justify-content: flex-start;
+    flex-grow: unset;
+    align-items: center;
+    border-radius: var(--global-radius);
+    height: 32px;
+    padding: 0 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    @include variants();
+    @include relevance();
+    @include sizes();
+
+    &:has([name='prepend']) {
+        padding-left: 0px;
+    }
+
+    &:has([name='append']) {
+        padding-right: 0px;
+    }
+
+    & .material-symbols-outlined {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    &[removable] {
+        &:hover {
+            cursor: pointer;
+            filter: brightness(0.9);
+
+            & span:first-child {
+                content: "close";
+            }
+        }
+    }
+
+    &[variant='outlined'] {
+        border: solid 1px;
+        @include relevance("light");
+    }
+}
+
+@include darkmode() {
+    & div[obi-chip] {
+        @include variants(true);
+
+        &[variant='outlined'] {
+            border: solid 1px;
+            @include relevance("dark");
+        }
+    }
+}

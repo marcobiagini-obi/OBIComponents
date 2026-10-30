@@ -1,0 +1,54 @@
+@import "../.res/shadows.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+div[obi-date] {
+    @include disabled() {
+        & [text-input] {
+            @include setSurface("dim");
+
+            & input {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    & div[text-input] {
+        & input {
+            height: 36px;
+            margin-top: 8px;
+        }
+
+        & label {
+            font-weight: normal;
+            font-size: 0.875rem;
+            letter-spacing: 0.25px;
+            height: .875rem;
+            opacity: 1;
+        }
+
+        & div[append] {
+            padding-right: 0;
+
+            & button {
+                height: 36px !important;
+                width: 36px !important;
+                min-width: unset;
+            }
+        }
+
+
+    }
+
+    & div[obi-calendar] {
+        height: 345px;
+    }
+}
+
+[group-component] {
+    & [obi-date] {
+        &+[obi-button] {
+            min-height: 56px;
+        }
+    }
+}

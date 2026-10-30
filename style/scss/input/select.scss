@@ -1,0 +1,286 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/input.scss";
+
+div[obi-select] {
+
+    &[variant='filled'] {
+        & div[text-input] {
+            @include setSurface("bright");
+
+            & label {
+                height: 47px;
+            }
+        }
+    }
+
+    &[variant='outlined'] {
+        margin-top: 18px;
+
+        &[valid] {
+            & label {
+                @include setColor("primary");
+                margin-top: -10px;
+                margin-left: -7px;
+            }
+        }
+
+        & div[text-input] {
+            padding: 0;
+            border-bottom: unset;
+            background-color: unset !important;
+
+            &:focus {
+                @include setColor("primary");
+            }
+
+            & div[text-indicator] {
+                display: none;
+            }
+
+            & label[title] {
+                padding: 4px;
+                left: 12px;
+                top: 0;
+                border-radius: 8px;
+            }
+
+            & label[input] {
+                background-color: unset !important;
+                border: 1px solid $neutral_alt;
+                border-radius: var(--global-radius);
+                margin: 0 !important;
+                height: 47px !important;
+                padding: 0 8px;
+
+
+                &:focus {
+                    @include setSurface("container");
+                    border-color: getGlobalColor("primary");
+                }
+            }
+        }
+    }
+
+    @include disabled() {
+        & div[text-input] {
+            @include setSurface("dim");
+        }
+
+        & input {
+            cursor: not-allowed;
+        }
+    }
+
+    @include unprintable();
+
+    &>div[obi-list] {
+        max-height: 360px;
+        overflow: auto;
+    }
+
+    &[required] {
+        & label::after {
+            content: "*";
+            margin-left: 4px;
+        }
+    }
+
+    &[valid] {
+        & div[text-input] label[title] {
+            @include body_small();
+            height: .875rem;
+            opacity: 1;
+        }
+    }
+
+    &[float-container='show'] {
+        & div[text-input]:not(:has(div[append])) {
+            label[title] {
+                color: getGlobalColor("primary");
+            }
+
+            & label[input]:after {
+                position: absolute;
+                right: 0;
+                content: "\e5c7";
+                font-family: 'Material Symbols Outlined';
+                font-size: 2em;
+            }
+        }
+
+        & div[text-input] div[text-indicator] {
+            width: 100%;
+            @include setColor("primary");
+        }
+    }
+
+    &[float-container='hide'] {
+        & div[text-input]:not(:has(div[append])) {
+
+            & label[input]::after {
+                position: absolute;
+                right: 0;
+                content: "\e5c5";
+                font-family: 'Material Symbols Outlined';
+                font-size: 1.7em;
+            }
+        }
+    }
+
+    & div[text-input] {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        flex-grow: 1;
+        border-radius: var(--global-radius) var(--global-radius) 0 0;
+        border-bottom: 1px solid $neutral_alt;
+        // @include setSurface("container");
+        height: 47px;
+        padding-top: 8px;
+
+        & select {
+            opacity: 0;
+            z-index: $layer_0;
+        }
+
+        & div[prepend] {
+            padding-left: 12px;
+
+            & .material-icons {
+                font-size: 24px;
+            }
+
+            &~label[title] {
+                left: 60px;
+            }
+        }
+
+        & div[append] {
+            padding-right: 12px;
+
+            & .material-icons {
+                font-size: 24px;
+            }
+        }
+
+        /* LABEL ======================================= */
+        & label[title] {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include body_large();
+            pointer-events: none;
+            white-space: nowrap;
+            transition: height .2s ease, font-size .2s ease;
+            top: 8px;
+            left: 16px;
+            height: 47px;
+            opacity: $default_opacity;
+        }
+
+        & label[input] {
+            margin: 0 16px;
+            height: 47px;
+            min-width: 200px;
+
+            line-height: 56px;
+            cursor: pointer;
+
+            @include input();
+            @include body_large();
+        }
+
+        & div[text-indicator] {
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -1px;
+            left: 0;
+            transition: width .2s ease;
+            @include setSurface("outline");
+        }
+
+        & div[message] {
+            &[relevance='danger'] {
+                @include setText($danger);
+            }
+
+            &[relevance='success'] {
+                @include setText($success);
+            }
+        }
+
+        &[invalid] {
+            border-color: $danger;
+
+            &>label {
+                @include setText($danger);
+            }
+        }
+    }
+
+    & div[text-support] {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        & span[message] {
+            margin: 0 16px;
+            margin-top: 4px;
+            flex-grow: 1;
+            text-align: left;
+            @include body_small();
+        }
+
+        & span[counter] {
+            margin: 0 16px;
+            margin-top: 4px;
+            flex-grow: unset;
+        }
+    }
+}
+
+[group-component] {
+    & [obi-select] {
+        &+[obi-button] {
+            min-height: 56px;
+        }
+    }
+}
+
+@include darkmode() {
+    & div[obi-select] {
+
+        &[float-container='show'] {
+            & div[text-input] label[title] {
+                color: getGlobalColor("primary");
+            }
+
+            & div[text-input] div[text-indicator] {
+                @include setColor("primary", "dark");
+            }
+        }
+
+        & div[text-input] {
+            @include setSurface("container", true);
+
+            & div[text-indicator] {
+                @include setSurface("outline", true);
+            }
+
+            & div[message] {
+                &[relevance='danger'] {
+                    @include setText($danger, "dark");
+                }
+
+                &[relevance='success'] {
+                    @include setText($success, "dark");
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,24 @@
+@use "sass:color";
+@import "dataset.scss";
+
+@mixin background($color, $important: false) {
+    @if $important{
+        background-color: $color !important;
+    }@else{
+        background-color: $color;
+    }
+    @include setContrast($color);
+}
+
+@mixin setContrast($color) {
+
+    @if(color.whiteness($color) < 40) {
+        color: $palette_light;
+        border-color: $palette_light;
+    }
+
+    @else {
+        color: $palette_dark;
+        border-color: $palette_dark;
+    }
+}

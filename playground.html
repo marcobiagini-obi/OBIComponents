@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,-25" />
+    <link type="text/css" rel="stylesheet" href="./style/StyleBundle.css">
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+    </style>
+    <script src="./componentsBundle.js" type="module"></script>
+    <script src="./components/Demo.Component.js" type="module"></script>
+</head>
+
+<body>
+
+    <obi-app id="app" titolo="PLAYGROUND" fixed home="#" clean>
+        <div app-tools slot="tools">
+            <app-search :opzioni="searchlist" label="Ricerca nella documentazione" @obisearch="navigate"></app-search>
+            <obi-button tool-item icon @click="$.navigate('old.doc')"><obi-icon nome="help"></obi-icon></obi-button>
+            <app-settings>
+                <app-settings-list>
+                    <settings-item-darkmode></settings-item-darkmode>
+                    <settings-item-theme></settings-item-theme>
+                    <settings-item-radius></settings-item-radius>
+                </app-settings-list>
+            </app-settings>
+            <obi-dashboard></obi-dashboard>
+        </div>
+            <app-user slot="user"></app-user>
+        <obi-nav slot="navigation" app-menu :collapsed="$.current != 'home'">
+            <nav-item cmd-for="item in menu" :titolo="item.title" :icona="item.icon" @click='$.navigate($.item.page)'
+                id='nav_:index' :name="item.page" :attivo='$.currentView == $.item.page.split(".")[0]'></nav-item>
+        </obi-nav>
+        <app-content>
+            <div display-row flex-top>
+                <div id="docsNav" cmd-if="$.currentView == 'docs'" style="position: sticky; top:0">
+                    <obi-tree :data="documentazione.navigazione.docs" mode="single"></obi-tree>
+                </div>
+                <div flex-direction="column" flex-size="1">
+                    <obi-card cmd-for="item in documentazione.contenuto" :titolo="item.nome" flex-size="1"
+                        cmd-filter="$.current == item.id">
+                        <card-body cmd-for="element in item.sezioni" display-grid="blog">
+                            <obi-title grid-article cmd-if="element.titolo" :titolo="element.titolo"></obi-title>
+                            <p style="white-space: pre-line;" grid-article>{{element.note}}</p>
+                            <test-template variant="outlined" grid-quote cmd-if="$.element.codice != null"
+                                :name="element.descrizione" :code="element.codice" :just-code="!$.element.preview"
+                                :data="element.dataset"></test-template>
+                        </card-body>
+                    </obi-card>
+                    <div>
+                        <app-header-component cmd-if="$.current == 'comp.applicazione.header'"
+                            class="container"></app-header-component>
+                        <obi-alert-component cmd-elseif="$.current == 'comp.interfaccia.alert'"
+                            class="container"></obi-alert-component>
+                        <obi-card-component cmd-elseif="$.current == 'comp.interfaccia.card'"
+                            class="container"></obi-card-component>
+                        <obi-modal-component cmd-elseif="$.current == 'comp.interfaccia.modal'"
+                            class="container"></obi-modal-component>
+                        <obi-badge-component cmd-elseif="$.current == 'comp.interfaccia.badge'"
+                            class="container"></obi-badge-component>
+                        <obi-sideview-component cmd-elseif="$.current == 'comp.interfaccia.sideview'"
+                            class="container"></obi-sideview-component>
+                        <obi-table-component cmd-elseif="$.current == 'comp.dati.tabella'"
+                            class="container"></obi-table-component>
+                        <obi-list-component cmd-elseif="$.current == 'comp.dati.lista'"
+                            class="container"></obi-list-component>
+                        <obi-form-component cmd-elseif="$.current == 'comp.dati.form'"
+                            class="container"></obi-form-component>
+                        <obi-chat-component cmd-elseif="$.current == 'comp.dati.chat'"
+                            class="container"></obi-chat-component>
+                        <obi-button-component cmd-elseif="$.current == 'comp.input.button'"
+                            class="container"></obi-button-component>
+                        <obi-textbox-component cmd-elseif="$.current == 'comp.input.textbox'"
+                            class="container"></obi-textbox-component>
+                        <obi-check-component cmd-elseif="$.current == 'comp.input.checkbox'"
+                            class="container"></obi-check-component>
+                        <obi-checkgroup-component cmd-elseif="$.current == 'comp.input.checkgroup'"
+                            class="container"></obi-checkgroup-component>
+                        <obi-select-component cmd-elseif="$.current == 'comp.input.select'"
+                            class="container"></obi-select-component>
+                        <obi-slider-component cmd-elseif="$.current == 'comp.input.slider'"
+                            class="container"></obi-slider-component>
+                        <obi-date-component cmd-elseif="$.current == 'comp.input.datepicker'"
+                            class="container"></obi-date-component>
+                        <obi-time-component cmd-elseif="$.current == 'comp.input.timepicker'"
+                            class="container"></obi-time-component>
+                        <obi-file-component cmd-elseif="$.current == 'comp.input.filepicker'"
+                            class="container"></obi-file-component>
+                        <obi-nav-component cmd-elseif="$.current == 'comp.navigazione.navigazione'"
+                            class="container"></obi-nav-component>
+                        <obi-tabs-component cmd-elseif="$.current == 'comp.navigazione.tabs'"
+                            class="container"></obi-tabs-component>
+                        <obi-tree-component cmd-elseif="$.current == 'comp.navigazione.tree'"
+                            class="container"></obi-tree-component>
+                        <obi-breadcrumbs-component cmd-elseif="$.current == 'comp.navigazione.breadcrumbs'"
+                            class="container"></obi-breadcrumbs-component>
+                    </div>
+                </div>
+                <div id="compNav" cmd-if="$.currentView == 'comp'" style="position: sticky; top:0">
+                    <obi-tree :data="documentazione.navigazione.obicomponents" mode="single"></obi-tree>
+                </div>
+                <div id="apiNav" cmd-if="$.currentView == 'api'" style="position: sticky; top:0">
+                    <obi-tree :data="documentazione.api" mode="single"></obi-tree>
+                </div>
+            </div>
+            <div cmd-if="$.current == 'demo'">
+                <obi-tab>
+                    <tab-item titolo="Applicazione" @click="$.demotab = 'applicazione'" :attivo="$.demotab == 'applicazione'"></tab-item>
+                    <tab-item titolo="Componente" @click="$.demotab = 'componente'" :attivo="$.demotab == 'componente'"></tab-item>
+                </obi-tab>
+                <demo-component name="Demo Component" cmd-if="$.demotab == 'componente'"></demo-component>
+                <demo-app-component name="Demo Applicazione" cmd-elseif="$.demotab == 'applicazione'"></demo-app-component>
+            </div>
+        </app-content>
+    </obi-app>
+
+    <script type="module">
+        import UserHandler from "./LAMP/UserModule/LampAccess.js";
+        import Service from "./LAMP/ServerModule/LampService.js";
+        import RenderEngine from "./LAMP/RenderModule/LampRender.js";
+        import { Collection } from "./LAMP/RenderModule/modules/enumerators.js";
+        import { obiAlert } from "./core.js";
+        import { documentazione, navigazione } from "./src/documentazione/docBundle.js";
+        import Perform from "./src/performanceWatcher.js";
+
+        const default_settings = { darkmode: false, radius: "4px" };
+        const navkey = "page";
+        const controller = RenderEngine.instance.start("app").build({
+            dataset: {
+                users: [],
+                homeview: "home",
+                pages: [
+                    { title: "Home", icon: "home", count: function (data) { return 0; }, page: "home", active: function (data) { return data.current == "home"; } },
+                    { title: "Documentazione", icon: "menu_book", count: function (data) { return 0; }, page: "docs.components", active: function (data) { return data.currentView == "doc"; } },
+                    { title: "Componenti", icon: "widgets", count: function (data) { return 0; }, page: "comp.login", active: function (data) { return data.currentView == "comp"; } },
+                    { title: "API", icon: "host", count: function (data) { return 0; }, page: "api", active: function (data) { return data.currentView == "api"; } },
+                    { title: "Demo", icon: "terminal", count: function (data) { return 0; }, page: "demo", active: function (data) { return data.currentView == "demo"; } },
+                ],
+                documentazione: {
+                    navigazione: navigazione,
+                    api: [],
+                    contenuto: documentazione,
+                },
+                current: sessionStorage.getItem(navkey) ?? "home",
+                searchlist: [],
+                demotab: "applicazione",
+            },
+            actions: {
+                navigate: function (page) {
+                    this.current = page;
+                    sessionStorage.setItem(navkey, page);
+                    this.__node.update();
+                    window.scrollTo(0, 0);
+
+                    var doc_nav = document.getElementById("docsNav");
+                    var comp_nav = document.getElementById("compNav");
+                    if (doc_nav)
+                        doc_nav.virtual.children[0].vtemplate_children[0].context.openNode(document.querySelector(`div[tree-item][data-value='${sessionStorage.getItem(navkey)}']`));
+                    if (comp_nav)
+                        comp_nav.virtual.children[0].vtemplate_children[0].context.openNode(document.querySelector(`div[tree-item][data-value='${sessionStorage.getItem(navkey)}']`));
+                },
+                testLoader: function () {
+                    this.progress = 0;
+                    loop.call(this);
+
+                    function loop() {
+                        if (this.progress < 100) {
+                            this.progress += 1; setTimeout(() => { loop.call(this); }, 30);
+                        }
+                    }
+                },
+                changeComponentsView: function (vnode) {
+                    if (vnode && vnode.data.label && !("children" in vnode.data)) {
+                        sessionStorage.setItem(navkey, "comp_" + vnode.data.label.toLowerCase());
+                        this.__node.update();
+                        // window.scrollTo(0, 0);
+                    }
+                },
+                changeHomeView: function (vnode) {
+                    if (vnode && vnode.data.value) {
+                        this.homeview = vnode.data.value;
+                    }
+                },
+                login: async function () {
+                    try {
+                        var username = document.getElementById("txt_username")?.virtual.context.value;
+                        if (username) {
+                            var user_data = await Service.instance.getJson(`http://localhost:3000/Users?username=${username}`);
+                            if (user_data.length)
+                                UserHandler.instance.login(username, user_data[0], default_settings);
+                            else
+                                obiAlert("Nessun utente trovato", { type: Collection.message_type.danger });
+                        } else {
+                            obiAlert("Inserire un nome utente", { type: Collection.message_type.warning });
+                        }
+                    } catch (ex) {
+                        obiAlert("Errore nella lettura degli utenti", { type: Collection.message_type.server_error });
+                    }
+                },
+                buildSearchList() {
+                    let list = []; for (const item of this.documentazione.contenuto) {
+                        for (const section of item.sezioni) {
+                            list.push({
+                                title: item.nome + " - " + section.titolo, content: section.note + section.descrizione +
+                                    section.codice, value: item.id
+                            });
+                        }
+                    }
+                    return list;
+                },
+            },
+            computed: {
+                currentView: function () { return this.current.split(".")[0] },
+                menu: function () {
+                    let _menu = [];
+                    for (const nav of this.pages) {
+                        _menu.push({
+                            title: nav.title,
+                            icon: nav.icon,
+                            count: nav.count(this),
+                            page: nav.page,
+                            active: nav.active(this)
+                        })
+                    }
+                    return _menu;
+                },
+                numeri: function () {
+                    let _array = [];
+                    for (let i = 0; i < this.numero; i++) { _array.push(i); } return _array;
+                },
+                ontop: function () {
+                    return
+                    this.__element.scrollHeight < 10;
+                },
+                logged: function () { return UserHandler?.instance.logged || false; },
+                user: function () { return UserHandler.instance.user || {}; },
+                stampa: function () {
+                    return
+                    this.demo.prova.replace("OBI", "<strong style='color: orange;'>OBI</strong>");
+                },
+            },
+            events: [
+                {
+                    name: "progress",
+                    action: async function (state) {
+                        switch (state) {
+                            case "mounted":
+                                new Promise(() => { this.searchlist = Perform.measure(() => this.buildSearchList(), "BUILDING SEARCHLIST"); });
+                                UserHandler.instance.sessionLogin();
+                                this.navigate(this.current);
+                                this.documentazione.api = await initializeApiDocumentation();
+                                break;
+                        }
+                    }
+                },
+            ],
+            settings: {
+                debug: false,
+                interface: UserHandler.instance.settings
+            },
+        });
+        UserHandler.instance.onLogout(() => {
+            controller.updateSettings({ interface: default_settings });
+            controller.update();
+        });
+        UserHandler.instance.onLogin(() => {
+            controller.updateSettings({ interface: UserHandler.instance.settings });
+            controller.update();
+        });
+
+        async function initializeApiDocumentation() {
+            var navigazioneApi = {
+                label: "Documentazione API",
+                active: true,
+                children: [],
+            };
+            
+            try{
+                await loadApiDocs("http://swita000006.de.obi.net/serviziweb/ClientiObi/documentazione.js");
+                await loadApiDocs("http://swita000006.de.obi.net/serviziweb/b2b/documentazione.js");
+                await loadApiDocs("http://swita000006.de.obi.net/serviziweb/obihub/documentazione.js");
+                await loadApiDocs("http://swita000006.de.obi.net/serviziweb/obifornitori/documentazione.js");
+            }catch(ex){console.error(ex);}
+            
+            return navigazioneApi;
+            
+            async function loadApiDocs(url){
+                const api = await import(url);
+                let apiDocs = api.default;
+                navigazioneApi.children.push(apiDocs.index);
+                for (var item of apiDocs.content) { documentazione.push(item); }
+            }
+        }
+    </script>
+
+    <!-- <script name="login" type="module">
+            import UserHandler from "./LAMP/UserModule/LampAccess.js";
+            import Service from "./LAMP/ServerModule/LampService.js";
+            import log from "./LAMP/RenderModule/modules/console.js";
+            import { obiAlert } from "./core.js";
+            const server = Service.Instance({ connectionTimer: 30000 });
+    
+            const login_interface = {
+                dataset: {
+                    logged: UserHandler.instance.logged,
+                    ontop: true,
+                },
+                actions: {
+                    login: async function (data) {
+                        try {
+                            if (data.username && data.password) {
+                                server.get("./tdata.json", async (result) => {
+                                    result.json().then((database) => {
+                                        if (database) {
+                                            let user = database.Users.find(u => u.username == data.username && u.password == data.password);
+                                            if (user) {
+                                                UserHandler.instance.login("playground_user:" + user.username, user, { darkmode: false, radius: "0px" });
+                                                return;
+                                            }
+                                            obiAlert("Non è stato trovato nessun utente con questi dati di accesso", { type: "warning" });
+                                            return;
+                                        }
+                                        obiAlert("Non è stato possibile leggere i dati", { type: "error" });
+                                        return;
+                                    });
+                                }, (result) => {
+                                    log(result.message, "error");
+                                    obiAlert("Si è verificato un problema con la chiamata al server.", { type: "error" });
+                                });
+                            } else {
+                                obiAlert("Inserisci un username e una password.", { type: "error" });
+                                return;
+                            }
+                        } catch (ex) {
+                            obiAlert("Si è verificato un problema con la chiamata al server.", { type: "error" });
+                        }
+                    },
+                    logout: function () {
+                        UserHandler.instance.logout();
+                    }
+                },
+                settings: {
+                    debug: true,
+                }
+            }
+    
+            UserHandler.instance.onLogin((user) => {
+                controller.update(appdata).then(() => {
+                    controller.application.context.logged = UserHandler.instance.logged;
+                });
+            });
+            UserHandler.instance.onLogout(() => {
+                controller.build(login_interface);
+            });
+    
+            UserHandler.instance.sessionLogin();
+        </script> -->
+</body>
+
+</html>

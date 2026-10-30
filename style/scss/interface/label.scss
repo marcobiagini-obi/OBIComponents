@@ -1,0 +1,114 @@
+@import "../.res/variants.scss";
+
+div[obi-label] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-height: 44px;
+    align-items: center;
+    flex-grow: 1;
+    // padding: 8px;
+
+    &[column] {
+        flex-direction: column;
+        align-items: flex-start;
+
+        &>[label] {
+            margin-right: unset;
+            margin-bottom: 8px;
+        }
+
+        &:has(.material-symbols-outlined) {
+            &>span {
+                margin-left: 44px;
+            }
+
+            &>[label] {
+                margin-bottom: 0px;
+            }
+        }
+
+    }
+
+    &[full-column] {
+        flex-direction: column;
+        align-items: center;
+
+        &>[label] {
+            flex-direction: column;
+            margin-right: unset;
+            margin-bottom: 8px;
+
+            &>span {
+                margin-right: unset;
+                padding-bottom: 8px;
+            }
+        }
+    }
+
+    &>[label] {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        margin-right: 8px;
+        font-size: inherit;
+        @include obi-font();
+
+        &>span {
+            padding-right: 8px;
+        }
+    }
+
+    &>span {
+        flex-grow: 1;
+    }
+
+    &[size='xs'] {
+        font-size: .75em !important;
+
+        & [label] strong {
+            font-size: .75em !important;
+        }
+    }
+
+    &[size='sm'] {
+        font-size: .875em !important;
+
+        & [label] strong {
+            font-size: .75em !important;
+        }
+    }
+
+    &[size='md'] {
+        font-size: 1.25em !important;
+
+        & [label] strong {
+            font-size: 1.25em !important;
+        }
+    }
+
+    &[size='lg'] {
+        font-size: 2em !important;
+
+        & [label] strong {
+            font-size: 2em !important;
+        }
+    }
+
+    &[size='xl'] {
+        font-size: 3em !important;
+
+        & [label] strong {
+            font-size: 3em !important;
+        }
+    }
+
+    &[size='xxl'] {
+        font-size: 6em !important;
+
+        & [label] strong {
+            font-size: 6em !important;
+        }
+    }
+}

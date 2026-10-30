@@ -1,0 +1,156 @@
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/dataset.scss";
+
+div[tree-item] {
+    display: flex;
+    flex-direction: column;
+    @include sizes();
+
+    &[root] {
+        border-radius: var(--global-radius);
+        overflow: hidden;
+    }
+
+    &:not([leaf]) {
+        &[active] {
+            &>a[tree-header] {
+                &::after {
+                    content: "\e5c7";
+                }
+            }
+        }
+
+        &>a[tree-header] {
+            &::after {
+                content: "\e5c5";
+                font-family: 'Material Symbols Outlined';
+                font-style: normal;
+                font-size: 1.2em;
+            }
+        }
+    }
+
+    &[active] {
+        &>a[tree-header] {
+            @include setColor("secondary", "light_container");
+        }
+
+        &>div[tree-children] {
+            height: fit-content;
+        }
+
+        &[current] {
+            &>a[tree-header] {
+                @include setColor("primary", "light_container");
+            }
+        }
+
+        &[blur] {
+            &>a[tree-header] {
+                @include setColor($neutral_alt, "light_container");
+            }
+        }
+    }
+
+    &>a[tree-header] {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
+        border-radius: 0 0 0 var(--global-radius);
+        padding: 0 8px;
+        height: 52px;
+
+        &:hover,
+        &:focus {
+            @include setColor($neutral, "light_container");
+        }
+
+        &>span[obi-badge] {
+            position: initial;
+        }
+
+        &>[obi-icon] {
+            flex-grow: unset;
+            cursor: inherit;
+
+            @include relevance("light", true);
+        }
+
+        & label {
+            padding: 0 16px;
+            position: relative;
+            display: flex;
+            flex-grow: 1;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            color: unset;
+            text-decoration: unset;
+            overflow: hidden;
+            cursor: inherit;
+        }
+    }
+
+    &>div[tree-children] {
+        display: grid;
+        grid-template-columns: auto;
+        margin-left: 16px;
+        overflow: hidden;
+        height: 0;
+    }
+
+    @include media-breakpoint('md', true) {
+        &>a[tree-header] {
+            height: 30px;
+            font-size: small;
+
+            & label {
+                padding: unset;
+                padding-left: 8px;
+            }
+        }
+    }
+
+}
+
+@include darkmode() {
+    & div[tree-item] {
+        &[active] {
+            &>a[tree-header] {
+                @include setColor("secondary", "dark_container");
+            }
+
+            &[current] {
+                &>a[tree-header] {
+                    @include setColor("primary", "dark_container");
+                }
+            }
+
+            &[blur] {
+                &>a[tree-header] {
+                    @include setColor($neutral_alt, "dark_container");
+                }
+            }
+        }
+
+        &>a[tree-header] {
+
+            &:hover,
+            &:focus {
+                @include setColor($neutral, "dark_container");
+            }
+
+            &>[obi-icon] {
+                @include relevance("dark", true);
+            }
+        }
+
+    }
+}

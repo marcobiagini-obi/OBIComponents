@@ -1,0 +1,383 @@
+@use "sass:color";
+@use "sass:map";
+@import "./dataset.scss";
+@import "./shadows.scss";
+@import "./colors.scss";
+
+@mixin variants($dark: false) {
+    &[variant='elevated'] {
+        z-index: $layer_1;
+        @include setSurface("container_highest");
+        @include elevated($dark);
+    }
+
+    &[variant='outlined'] {
+        border: $default_border;
+    }
+
+    &[variant='filled']:not([relevance]) {
+
+        @if($dark) {
+            @include setColor($neutral, "light");
+        }
+
+        @else {
+            @include setColor($neutral, "dark");
+        }
+
+    }
+}
+
+@mixin relevance($set: "light_container", $text: false) {
+
+    @if($text) {
+        &[relevance='brand'] {
+            @include setText("brand", $set);
+        }
+
+        &[relevance='primary'] {
+            @include setText("primary", $set);
+        }
+
+        &[relevance='secondary'] {
+            @include setText("secondary", $set);
+        }
+
+        &[relevance='tertiary'] {
+            @include setText("tertiary", $set);
+        }
+
+        &[relevance='success'] {
+            @include setText($success, $set);
+        }
+
+        &[relevance='warning'] {
+            @include setText($warning, $set);
+        }
+
+        &[relevance='danger'] {
+            @include setText($danger, $set);
+        }
+
+        &[relevance='info'] {
+            @include setText($info, $set);
+        }
+
+        &[relevance='neutral'] {
+            @include setText($neutral, $set);
+        }
+
+        &[relevance='dark'] {
+            @include setText($neutral, "dark");
+        }
+    }
+
+    @else {
+        &[relevance='brand'] {
+            border: solid 1px;
+            @include setColor("brand", $set);
+            @include setBorderColor("brand", $set);
+        }
+
+        &[relevance='primary'] {
+            border: solid 1px;
+            @include setColor("primary", $set);
+            @include setBorderColor("primary", $set);
+        }
+
+        &[relevance='secondary'] {
+            border: solid 1px;
+            @include setColor("secondary", $set);
+            @include setBorderColor("secondary", $set);
+        }
+
+        &[relevance='tertiary'] {
+            border: solid 1px;
+            @include setColor("tertiary", $set);
+            @include setBorderColor("tertiary", $set);
+        }
+
+        &[relevance='success'] {
+            border: solid 1px;
+            @include setColor($success, $set);
+            @include setBorderColor($success, $set);
+        }
+
+        &[relevance='warning'] {
+            border: solid 1px;
+            @include setColor($warning, $set);
+            @include setBorderColor($warning, $set);
+        }
+
+        &[relevance='danger'] {
+            border: solid 1px;
+            @include setColor($danger, $set);
+            @include setBorderColor($danger, $set);
+        }
+
+        &[relevance='info'] {
+            border: solid 1px;
+            @include setColor($info, $set);
+            @include setBorderColor($info, $set);
+        }
+
+        &[relevance='neutral'] {
+            border: solid 1px;
+            @include setColor($neutral, $set);
+            @include setBorderColor($neutral, $set);
+        }
+
+        &[relevance='dark'] {
+            border: solid 1px;
+            @include setColor($neutral_alt, "dark_container");
+            @include setBorderColor($neutral_alt, "dark_container");
+        }
+    }
+}
+
+@mixin sizes() {
+    &[size='xs'] {
+        font-size: .75em !important;
+
+        & .material-symbols-outlined {
+            font-size: 18px !important;
+        }
+    }
+
+    &[size='sm'] {
+        font-size: .875em !important;
+
+        & .material-symbols-outlined {
+            font-size: 24px !important;
+        }
+    }
+
+    &[size='md'] {
+        font-size: 1.25em !important;
+
+        & .material-symbols-outlined {
+            font-size: 32px !important;
+        }
+    }
+
+    &[size='lg'] {
+        font-size: 2em !important;
+
+        & .material-symbols-outlined {
+            font-size: 40px !important;
+        }
+    }
+
+    &[size='xl'] {
+        font-size: 3em !important;
+
+        & .material-symbols-outlined {
+            font-size: 48px !important;
+        }
+    }
+
+    &[size='xxl'] {
+        font-size: 6em !important;
+
+        & .material-symbols-outlined {
+            font-size: 56px !important;
+        }
+    }
+}
+
+@mixin media-breakpoint($size, $max: false) {
+    @if $size=='sm' {
+        @if $max {
+
+            // Small devices (landscape phones, 576px and up)
+            @media (max-width: $screen_sm) {
+                @content;
+            }
+        }
+
+        @else {
+
+            // Small devices (landscape phones, 576px and up)
+            @media (min-width: $screen_sm) {
+                @content;
+            }
+        }
+    }
+
+    @else if $size=='md' {
+        @if $max {
+
+            // Medium devices (tablets, 768px and up)
+            @media (max-width: $screen_md) {
+                @content;
+            }
+        }
+
+        @else {
+
+            // Medium devices (tablets, 768px and up)
+            @media (min-width: $screen_md) {
+                @content;
+            }
+        }
+    }
+
+    @else if $size=='lg' {
+
+        @if $max {
+
+            // Medium devices (tablets, 768px and up)
+            @media (max-width: $screen_lg) {
+                @content;
+            }
+        }
+
+        @else {
+
+            // Medium devices (tablets, 768px and up)
+            @media (min-width: $screen_lg) {
+                @content;
+            }
+
+        }
+    }
+
+    @else if $size=='xl' {
+
+        @if $max {
+
+            // Medium devices (tablets, 768px and up)
+            @media (max-width: $screen_xl) {
+                @content;
+            }
+        }
+
+        @else {
+
+            // Medium devices (tablets, 768px and up)
+            @media (min-width: $screen_xl) {
+                @content;
+            }
+        }
+    }
+
+    @else if $size=='xxl' {
+
+        @if $max {
+
+            // Medium devices (tablets, 768px and up)
+            @media (max-width: $screen_xxl) {
+                @content;
+            }
+        }
+
+        @else {
+
+            // Medium devices (tablets, 768px and up)
+            @media (min-width: $screen_xxl) {
+                @content;
+            }
+        }
+    }
+}
+
+@mixin container-breakpoint($size) {
+    @if $size=='sm' {
+
+        // Small devices (landscape phones, 576px and up)
+        @container (width <=$screen_sm) {
+            @content;
+        }
+    }
+
+    @else if $size=='md' {
+
+        // Small devices (landscape phones, 576px and up)
+        @container (width <=$screen_md) {
+            @content;
+        }
+    }
+
+    @else if $size=='lg' {
+
+        // Small devices (landscape phones, 576px and up)
+        @container (width <=$screen_lg) {
+            @content;
+        }
+    }
+
+    @else if $size=='xl' {
+
+        // Small devices (landscape phones, 576px and up)
+        @container (width <=$screen_xl) {
+            @content;
+        }
+    }
+
+    @else if $size=='xxl' {
+
+        // Small devices (landscape phones, 576px and up)
+        @container (width <=$screen_xxl) {
+            @content;
+        }
+    }
+}
+
+@mixin darkmode() {
+    body[theme='dark'] {
+        @content;
+    }
+}
+
+@mixin disabled() {
+
+    &:disabled,
+    &[disabled] {
+        opacity: 50%;
+        cursor: not-allowed;
+        @content;
+    }
+}
+
+@mixin elevated($dark: false) {
+    @if($dark) {
+        box-shadow: $shadow_settings_dark;
+        -moz-box-shadow: $shadow_settings_dark;
+        -webkit-box-shadow: $shadow_settings_dark;
+    }
+
+    @else {
+        box-shadow: $shadow_settings;
+        -moz-box-shadow: $shadow_settings;
+        -webkit-box-shadow: $shadow_settings;
+    }
+}
+
+@mixin unprintable() {
+    @media print {
+        display: none !important;
+    }
+}
+
+@mixin obi-font() {
+    font-family: OBIFont;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+@mixin flexsizing {
+
+    @for $size from 1 to 6 {
+        & [flex-size='#{$size}'] {
+            flex-grow: #{$size} !important;
+        }
+    }
+
+    & [flex-size='auto'] {
+        flex-grow: 1 !important;
+    }
+
+    & [flex-size='unset'] {
+        flex-grow: unset !important;
+    }
+}

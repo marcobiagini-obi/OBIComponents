@@ -1,0 +1,48 @@
+/* INTERFACE */
+@import url("compiled/general.min.css");
+@import url("compiled/screensize.min.css");
+@import url("compiled/display.min.css");
+@import url("compiled/distance.min.css");
+@import url("compiled/text.min.css");
+@import url("compiled/icon.min.css");
+@import url("compiled/headline.min.css");
+@import url("compiled/chip.min.css");
+@import url("compiled/modal.min.css");
+@import url("compiled/listview.min.css");
+@import url("compiled/label.min.css");
+@import url("compiled/header.min.css");
+@import url("compiled/sideview.min.css");
+@import url("compiled/loader.min.css");
+@import url("compiled/stepper.min.css");
+@import url("compiled/unit.test.min.css");
+@import url("compiled/splashscreen.min.css");
+@import url("compiled/calendar.min.css");
+/* INPUT */
+@import url("compiled/button.min.css");
+@import url("compiled/textbox.min.css");
+@import url("compiled/select.min.css");
+@import url("compiled/checkbox.min.css");
+@import url("compiled/combobox.min.css");
+@import url("compiled/slider.min.css");
+@import url("compiled/date.min.css");
+@import url("compiled/time.min.css");
+@import url("compiled/file.min.css");
+@import url("compiled/chiplist.min.css");
+@import url("compiled/codeblock.min.css");
+/* COMPONENTS */
+@import url("compiled/application.min.css");
+@import url("compiled/navigation.min.css");
+@import url("compiled/breadcrumbs.min.css");
+@import url("compiled/tree.min.css");
+@import url("compiled/tabs.min.css");
+@import url("compiled/alert.min.css");
+@import url("compiled/editor.min.css");
+@import url("compiled/title.min.css");
+@import url("compiled/cover.min.css");
+@import url("compiled/cards.min.css");
+@import url("compiled/badge.min.css");
+@import url("compiled/toolbar.min.css");
+@import url("compiled/datatable.min.css");
+@import url("compiled/chat.min.css");
+
+@import url("compiled/testcomponent.min.css");

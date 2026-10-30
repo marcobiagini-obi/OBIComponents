@@ -1,0 +1,192 @@
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+$line_weight: 2px;
+
+@mixin column-item() {
+    flex-direction: column;
+    align-items: flex-start;
+
+    & [line] {
+        min-width: unset;
+        width: $line_weight;
+        min-height: 24px;
+        margin-left: 29px;
+    }
+}
+
+[obi-stepper] {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    &[extended] {
+        & [stepper-item] {
+            flex-grow: 1;
+        }
+    }
+
+    &[column] {
+        flex-direction: column;
+
+        & [stepper-item] {
+            @include column-item();
+        }
+    }
+
+    &[interact] {
+        & [stepper-item] [obi-label]:hover {
+            cursor: pointer;
+            @include setSurface("dim");
+        }
+    }
+
+    & [stepper-item] {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        @include setText($neutral);
+
+        & [obi-label] {
+            flex-grow: unset;
+            margin: 8px;
+            padding-right: 12px;
+            border-radius: var(--global-radius);
+
+            & .material-symbols-outlined {
+                font-size: 1.1rem;
+            }
+
+            &>span {
+                position: absolute;
+                bottom: 0;
+                margin-bottom: -4px;
+                @include setText($neutral, "dark");
+            }
+        }
+
+        & [line] {
+            flex-grow: 1;
+            height: $line_weight;
+            border-radius: 2px;
+            min-width: 40px;
+            @include setColor($neutral, "light_container");
+        }
+
+        &:last-child {
+            & [line] {
+                display: none;
+            }
+        }
+
+        &[current] {
+            @include setText("primary");
+        }
+
+        &[active] {
+
+            & .material-symbols-outlined,
+            & strong {
+                font-weight: bolder;
+            }
+
+            & strong {
+                text-decoration: underline;
+            }
+
+            & [obi-icon] span {
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin-top: -12px;
+                    margin-left: -12px;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    z-index: -1;
+                }
+            }
+        }
+
+        &[status='done'] {
+            @include setText("primary");
+
+            & [line] {
+                @include setColor("primary");
+            }
+        }
+
+        &[status='alert'] {
+            @include setText($danger);
+        }
+
+    }
+
+}
+
+@container parent (width <=#{$screen_md}) {
+    [obi-stepper] {
+        flex-direction: column;
+
+        & [stepper-item] {
+            @include column-item();
+        }
+    }
+}
+
+@include darkmode() {
+    & [obi-stepper] {
+
+        &[interact] {
+            & [stepper-item] [obi-label]:hover {
+                @include setSurface("dim", true);
+            }
+        }
+
+        & [stepper-item] {
+            @include setText($neutral, "dark");
+
+            & [obi-label] {
+                &>span {
+                    @include setText($neutral, "dark");
+                }
+            }
+
+            & [line] {
+                @include setColor($neutral, "dark");
+            }
+
+            &[current] {
+                @include setText("primary", "dark");
+            }
+
+            &[active] {
+
+                & [obi-icon] span {
+                    &::before {
+                        @include setSurface("dim", true);
+                    }
+                }
+            }
+
+            &[status='done'] {
+                @include setText("primary", "dark");
+
+                & [line] {
+                    @include setColor("primary", "dark");
+                }
+            }
+
+            &[status='alert'] {
+                @include setText($danger, "dark");
+            }
+
+        }
+
+    }
+
+}

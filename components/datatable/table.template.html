@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,-25" />
+    <link type='text/css' rel='stylesheet' href='../../style/StyleBundle.css'>
+    <script type='module' src='../../componentsBundle.js'></script>
+</head>
+
+<body>
+
+    <div id="template" style="width: 100%;">
+        <obi-button @click="activeRow" label="accendi"></obi-button>
+        <obi-table :dati='list' :colonne='columns' interact alternate="neutral" size="" chiave="id"></obi-table>
+    </div>
+
+    <script type="module">
+        import RenderEngine from "../../LAMP/RenderModule/LampRender.js";
+        import { Support } from '../../LAMP/RenderModule/modules/library.js';
+
+        RenderEngine.instance.start("template").build({
+            dataset: {
+                list: elabData(1000),
+                columns: [
+                    "id", 
+                    "nome", 
+                    { label:"data", name: "datetime", type: "datetime"}, 
+                    { label: "list", name: "tags", type: "array" },
+                    { label: "Editabile", name: "color", type: "code" }
+                ],
+                filtro: {},
+            },
+            computed: {
+                stepper: function () { return document.querySelector("[obi-stepper]").virtual; }
+            },
+            actions: {
+                done() {
+                    this.stepper.context.next();
+                },
+                goBack() {
+                    this.stepper.context.back();
+                },
+                activeRow(){
+                    let id = Math.floor(Math.random() * 10);
+                    document.querySelector("[obi-table]").virtual.context.setActiveRow(id);
+                }
+            },
+            events: [],
+            settings: {}
+        });
+
+
+                
+        function randomDate() {
+            return new Date(Math.random() * (2024 - 2020 + 1) + 2020,
+                Math.random() * (12) + 1,
+                Math.random() * (29) + 1);
+        }
+
+        function elabData(limit) {
+            var list = [];
+            for (let i = 0; i < limit; i++) {
+                list.push({ id: i, nome: Support.uniqueID(), datetime: randomDate(), tags: [
+                    {label: "mbiagini", value: 1, icona: "person", color: "tertiary" },
+                    {label: "kamadori", value: 2, icona: "person", color: 'primary' },
+                    {label: "mbiagini", value: 1, icona: "person", color: "tertiary" },
+                    {label: "kamadori", value: 2, icona: "person", color: 'primary' },
+                    {label: "mbiagini", value: 1, icona: "person", color: "tertiary" },
+                    {label: "kamadori", value: 2, icona: "person", color: 'primary' },
+                    {label: "mbiagini", value: 1, icona: "person", color: "tertiary" },
+                    {label: "kamadori", value: 2, icona: "person", color: 'primary' },
+                    {label: "mbiagini", value: 1, icona: "person", color: "tertiary" },
+                    {label: "kamadori", value: 2, icona: "person", color:'primary' },
+                ], valore: `<div contenteditable='true'>rosso</div>` });
+            }
+            return list;
+        }
+        //AND tra proprietà diverse e OR tra stesse proprietà
+        function checkFilter(data, filters) {
+            if (data == null) return false;
+            if (Object.keys(filters).length > 0) {
+                //Controllo per ogni proprietà se una sola condizione risulta vera allora la proprietà è vera
+                //ma se anche una sola proprietà non rispetta nessuna condizione, essendo le varie proprietà in AND di conseguenza nessuna è giusta.
+                for (const key of Object.keys(filters)) {
+                    if (filters[key].length && filters[key].find(value => condition(data[key], value)) == null) return false;
+                }
+            }
+            return true;
+
+            function condition(value, filter) {
+                if (filter) {
+                    switch (typeof value) {
+                        case "string": return value.toLowerCase().includes(filter.toString().toLowerCase());
+                        case "array": return value.some(e => e.toString().toLowerCase() == filter.toString().toLowerCase());
+                        default: return filter == value;
+                    }
+                }
+                return false;
+            }
+        }
+
+        function getFilter(filters) {
+            let filter = {};
+            if (Array.isArray(filters)) {
+                for (const item of filters) {
+                    if (item) {
+                        let props = Object.keys(item);
+                        for (const key of props) {
+                            if (item[key])
+                                if (key in filter) filter[key].push(item[key]); else filter[key] = [item[key]];
+                        }
+                    }
+                }
+            }
+            return filter;
+        }
+
+    </script>
+</body>
+
+</html>

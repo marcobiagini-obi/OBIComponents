@@ -1,0 +1,82 @@
+@import "../.res/variants.scss";
+@import "../.res/animations.scss";
+@import "../.res/colors.scss";
+
+div[obi-splashscreen] {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    gap: 4px;
+    z-index: $layer_5;
+    @include setSurface("container");
+
+    &[state='loading'] {
+        display: flex;
+    }
+
+    & [company-logo] {
+        height: 70px;
+        width: 160px;
+        background-image: url("../../../resources/images/obi.png");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    & [app-title] {
+        @include obi-font();
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        background-color: #ff7f08;
+        color: #FFF;
+        font-weight: bolder;
+        font-size: 2em;
+        padding: 0 16px;
+        cursor: pointer;
+    }
+
+    & [splash-animation-container] {
+
+        overflow: hidden;
+        width: 500px;
+        height: 160px;
+
+        & .logo {
+            position: relative;
+        }
+
+        & .logo-part {
+            /* start off-screen (same state as keyframes 0%) to avoid flash on load */
+            transform: translateX(calc(-100% - 50px));
+            @include splashScreen();
+            /* ensure initial keyframe is applied during animation-delay */
+            animation-fill-mode: both;
+            transform-box: fill-box;
+            transform-origin: center;
+            will-change: transform;
+        }
+
+        & .delay-0 {
+            animation-delay: 0s;
+        }
+
+        & .delay-1 {
+            animation-delay: 0.4s;
+        }
+
+        & .delay-2 {
+            animation-delay: 0.8s;
+        }
+    }
+}
+
+@include darkmode() {
+    & div[obi-splashscreen] {
+        @include setSurface("container", true);
+    }
+}

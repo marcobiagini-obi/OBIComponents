@@ -1,0 +1,180 @@
+@import "../.res/dataset.scss";
+@import "../.res/variants.scss";
+@import "../.res/colors.scss";
+@import "../.res/input.scss";
+
+div[obi-chiplist] {
+    margin-top: 12px;
+
+    &[invalid] {
+        & [text-input] {
+            border-color: $danger;
+
+            & label {
+                @include setText($danger);
+            }
+        }
+    }
+
+    @include disabled() {
+        & div[text-input] {
+            @include setSurface("dim");
+        }
+
+        & input {
+            cursor: not-allowed;
+        }
+    }
+
+    @include unprintable();
+
+    &[required] {
+        & label::after {
+            content: "*";
+            margin-left: 4px;
+        }
+    }
+
+    &[variant='filled'] {
+        & div[text-input] {
+            @include setSurface("bright");
+
+            & label {
+                height: 47px;
+            }
+        }
+    }
+
+    &[variant='outlined'] {
+        margin-top: 18px;
+
+        & div[text-input] {
+            padding: 0;
+            border-bottom: unset;
+            background-color: unset !important;
+
+            &:focus {
+                @include setColor("primary");
+            }
+
+            & div[text-indicator] {
+                display: none;
+            }
+
+            & label {
+                padding: 0 4px;
+                left: 12px;
+                top: 0;
+                border-radius: 8px;
+                height: 47px;
+            }
+
+            & input {
+                background-color: unset !important;
+                border: 1px solid $neutral_alt;
+                border-radius: var(--global-radius);
+                margin: 0 !important;
+                height: 47px !important;
+                padding: 0 8px;
+
+                &:not([empty]),
+                &:focus,
+                &[placeholder] {
+
+                    &~label {
+                        top: -12px;
+                        padding: 4px;
+                        @include setColor("primary");
+                        left: 12px;
+                        opacity: 1;
+                    }
+                }
+
+                &:focus {
+                    @include setSurface("container");
+                    border-color: getGlobalColor("primary");
+                }
+            }
+        }
+    }
+
+    div[obi-textbox] {
+        height: fit-content;
+
+        & div[text-input] {
+            flex-wrap: wrap;
+            min-height: unset;
+
+            & label {
+                top: -8px;
+            }
+
+            & [obi-chip] {
+                width: fit-content;
+                min-width: 100px;
+            }
+
+            & div[contenteditable='true'] {
+                margin: 0 0 8px 8px;
+                width: fit-content !important;
+
+                &:not([empty]),
+                &:focus {
+                    &~label {
+                        top: -16px !important;
+                    }
+                }
+            }
+        }
+    }
+
+    [group-component] {
+        & [obi-chiplist] {
+            margin: 0 !important;
+
+            & [text-input] {
+                border-radius: 0;
+            }
+
+            &[variant='outlined'] {
+                & input {
+                    border-radius: 0 !important;
+                }
+
+                &+[obi-button] {
+                    min-height: 49px;
+                }
+            }
+
+            &+[obi-button] {
+                min-height: 56px;
+            }
+        }
+
+        &>[obi-chiplist]:last-child {
+            & [text-input] {
+                border-radius: 0 var(--global-radius) 0 0;
+            }
+
+            &[variant='outlined'] {
+                & input {
+                    border-radius: 0 var(--global-radius) var(--global-radius) 0 !important;
+                }
+            }
+        }
+
+        &>[obi-chiplist]:first-child {
+            & [text-input] {
+                border-radius: var(--global-radius) 0 0 0;
+            }
+
+            &[variant='outlined'] {
+                & input {
+                    border-radius: var(--global-radius) 0 0 var(--global-radius) !important;
+                }
+            }
+        }
+    }
+
+    @include darkmode() {}
+}

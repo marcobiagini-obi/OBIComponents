@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,-25" />
+    <link type='text/css' rel='stylesheet' href='../../style/StyleBundle.css'>
+    <script type='module' src='../../componentsBundle.js'></script>
+</head>
+
+<body>
+    <div id="template" display-grid gap="xl" margin="md">
+        <obi-card grid-size="3" titolo="Prova Filled" descrizione="Card di prova per test grafico" prepend="PRE" append="APP" variant="filled"></obi-card>
+        <obi-card grid-size="3" titolo="Prova Elevated Colored" descrizione="Card di prova per test grafico con prepend icona e sfondo" prepend="<obi-icon nome='home'></obi-icon>" variant="elevated" relevance="tertiary"></obi-card>
+        <obi-card grid-size="3" titolo="Prova Outlined" descrizione="Card di prova per test grafico con append button" append="<obi-button @click='$.__app.context.stamp()' variant='filled' icon><obi-icon nome='message'></obi-icon></obi-button>" variant="outlined"></obi-card>
+        <obi-card grid-size="3" titolo="Prova Outlined Colored" descrizione="Card di prova per test grafico" variant="outlined" relevance="primary"></obi-card>
+        <obi-note grid-size="3" @created="addAppunto" id="inputNote"></obi-note>
+        <obi-note grid-size="3" cmd-for="item in notes" :appunto="item" :colore="secondary" @updated="onNoteSubmit" @deleted="onNoteRemoved" :value="item.id">
+            <obi-list slot="options">
+                <list-item testo="print"></list-item>
+            </obi-list>
+        </obi-note>
+    </div>
+
+    <script type="module">
+        import RenderEngine from "../../LAMP/RenderModule/LampRender.js";
+        import { Support } from '../../LAMP/RenderModule/modules/library.js';
+        import Appunto from "../../src/models/Appunto.js";
+        
+        import UserHandler from "../../LAMP/UserModule/LampAccess.js";
+
+        const users = [
+            { id: 2570, username: "agalli", nome: "Andrea", cognome: "Galli", email: "andrea.galli@obi-italia.it", ruolo: "admin" },
+            { id: 2571, username: "mbiagini1", nome: "Marco", cognome: "Biagini", email: "marco.biagini@obi-italia.it", ruolo: "admin" },
+            { id: 2573, username: "kamadori", nome: "Katia", cognome: "Amadori", email: "katia.amadori@obi-italia.it", ruolo: "user" },
+        ];
+
+        UserHandler.instance.login("mbiagini1", users.find(e => e.username == "mbiagini1"));
+
+        RenderEngine.instance.start("template").build({
+            dataset: {
+                notes: [
+                    new Appunto({id: 1, nome: "mbiagini1", note: "appunto di prova bello lungo con un testo che non sarà un lorem ipsum standard ma fa comunque il suo dovere!", idOwner: 2571, idLastUser: 2571 }),
+                    new Appunto({id: 1, nome: "mbiagini1", note: "Secondo appunto di prova per testare la modifica!", idOwner: 2571, idLastUser: 2571 }),
+                    new Appunto({id: 1, nome: "agalli", note: "Terzo appunto di prova per testare autori differenti!", idOwner: 2570, idLastUser: 2570 }),
+                ],
+            },
+            computed: {
+                inputNoteValue: function(){
+                    return document.getElementById("inputNote").virtual.context.valore;
+                }
+            },
+            actions: {
+                stamp(){
+                    alert("hello world");
+                },
+                addAppunto(item){
+                    item.id = this.notes.length ? Math.max(...this.notes.map(n => n.id || 0)) + 1 : 1;
+                    item.nome = UserHandler.instance.user.username;
+                    item.idOwner = UserHandler.instance.user.id;
+                    item.idLastUser = UserHandler.instance.user.id;
+                    this.notes.push(item);
+                },
+                onNoteSubmit(item){
+                    // const index = this.notes.findIndex(e => e.id == item.id);
+                    // if(index >= 0){
+                    //     this.notes[index] = item;
+                    // }
+                    console.log("Appunto modificato:", item);
+                },
+                onNoteRemoved(item){
+                    const index = this.notes.findIndex(e => e.id == item.id);
+                    if(index >= 0){
+                        this.notes.splice(index, 1);
+                    }
+                }
+            },
+            events: [],
+            settings: {}
+        });
+    </script>
+</body>
+
+</html>

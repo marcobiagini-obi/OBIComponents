@@ -1,0 +1,28 @@
+@mixin body_large {
+    font-weight: normal;
+    font-size: 1rem;
+    letter-spacing: .5px;
+}
+
+@mixin body_small {
+    font-weight: normal;
+    font-size: 0.875rem;
+    letter-spacing: 0.25px;
+}
+
+@mixin input {
+    appearance: unset;
+    -moz-appearance: unset;
+    -webkit-appearance: unset;
+    flex-grow: 1;
+    padding: 0px;
+    display: block;
+    border: none;
+    width: 100%;
+    background-color: unset;
+    color: unset;
+
+    &:focus {
+        outline: none;
+    }
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,-25" />
+    <link type='text/css' rel='stylesheet' href='../../style/StyleBundle.css'>
+    <script type='module' src='../../componentsBundle.js'></script>
+</head>
+
+<body>
+
+    <div id="template" margin="xl" display-column gap="lg">
+        <div display-row="wrap" paddin="lg" gap="md" style="height: fit-content;">
+            <obi-button @click="toggleDarkmode" variant="filled"><obi-icon nome="dark_mode"></obi-icon></obi-button>
+            <obi-chip label="Ciao" variant="filled" relevance="primary"></obi-chip>
+            <obi-chip label="Ciao" variant="filled" relevance="secondary"></obi-chip>
+            <obi-chip label="Ciao" variant="filled" relevance="tertiary"></obi-chip>
+            <obi-chip label="Ciao" variant="filled"></obi-chip>
+            <obi-chip label="Ciao" variant="outlined" relevance="primary"></obi-chip>
+            <obi-chip label="Ciao" variant="outlined" relevance="secondary"></obi-chip>
+            <obi-chip label="Ciao" variant="outlined" relevance="tertiary"></obi-chip>
+            <obi-chip label="Ciao" variant="outlined"></obi-chip>
+        </div>
+        <div>
+            <input type="file" id="fileInput" @change="loadImage" />
+            <obi-logo :src="url" style="width: 100px; height: 100px"></obi-logo>
+        </div>
+        <div style="width: fit-content;">
+            <obi-calendar></obi-calendar>
+        </div>
+    </div>
+
+    <script type="module">
+        import RenderEngine from "../../LAMP/RenderModule/LampRender.js";
+        import { Support } from '../../LAMP/RenderModule/modules/library.js';
+        import { View } from "../../LAMP/RenderModule/modules/library.js";
+        import BlobRegistry from "../../src/BlobRegistry.js";
+
+        const pipeline = new BlobRegistry();
+
+        RenderEngine.instance.start("template").build({
+            dataset: {
+                url:"",
+            },
+            computed: {},
+            actions: {
+                toggleDarkmode: function () {
+                    View.darkmode();
+                },
+                loadImage(evt){
+                    this.url = pipeline.create(evt.target.files[0], "testImage");
+                }
+            },
+            events: [
+                {
+                    name: "progress",
+                    action: async function (state) {
+                        if(state == "mounted"){
+                            this.negozi = await loadNegozi();
+                            this.__node.getChildContext("obi-chiplist")?.update();
+                        }
+                    }
+                }
+            ],
+            settings: {}
+        });
+
+        async function loadNegozi(){
+            return await new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        {label: "001 Negozio 1", value: 1},
+                        {label: "002 Negozio 2", value: 2},
+                        {label: "003 Negozio 3", value: 3},
+                        {label: "004 Negozio 4", value: 4},
+                        {label: "005 Negozio 5", value: 5},
+                        {label: "006 Negozio 6", value: 6}, 
+                    ]);
+                }, 1000);
+            });
+        }
+                
+        function randomDate() {
+            return new Date(Math.random() * (2024 - 2020 + 1) + 2020,
+                Math.random() * (12) + 1,
+                Math.random() * (29) + 1);
+        }
+
+        function elabData(limit) {
+            var list = [];
+            for (let i = 0; i < limit; i++) {
+                list.push({ id: i, nome: Support.uniqueID(), datetime: randomDate() });
+            }
+            return list;
+        }
+        //AND tra proprietà diverse e OR tra stesse proprietà
+        function checkFilter(data, filters) {
+            if (data == null) return false;
+            if (Object.keys(filters).length > 0) {
+                //Controllo per ogni proprietà se una sola condizione risulta vera allora la proprietà è vera
+                //ma se anche una sola proprietà non rispetta nessuna condizione, essendo le varie proprietà in AND di conseguenza nessuna è giusta.
+                for (const key of Object.keys(filters)) {
+                    if (filters[key].length && filters[key].find(value => condition(data[key], value)) == null) return false;
+                }
+            }
+            return true;
+
+            function condition(value, filter) {
+                if (filter) {
+                    switch (typeof value) {
+                        case "string": return value.toLowerCase().includes(filter.toString().toLowerCase());
+                        case "array": return value.some(e => e.toString().toLowerCase() == filter.toString().toLowerCase());
+                        default: return filter == value;
+                    }
+                }
+                return false;
+            }
+        }
+
+        function getFilter(filters) {
+            let filter = {};
+            if (Array.isArray(filters)) {
+                for (const item of filters) {
+                    if (item) {
+                        let props = Object.keys(item);
+                        for (const key of props) {
+                            if (item[key])
+                                if (key in filter) filter[key].push(item[key]); else filter[key] = [item[key]];
+                        }
+                    }
+                }
+            }
+            return filter;
+        }
+    </script>
+</body>
+
+</html>

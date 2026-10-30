@@ -1,0 +1,1 @@
+#unit_test{position:relative;display:flex;flex-direction:column;gap:16px}#unit_test .test-item{display:flex;flex-direction:row;align-items:center;grid-gap:8px}#unit_test .test-item.success .material-symbols-outlined{color:green}#unit_test .test-item.error .material-symbols-outlined{color:red}

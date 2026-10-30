@@ -1,0 +1,311 @@
+@import "../.res/shadows.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+div[obi-calendar] {
+    flex-direction: column;
+    border-radius: var(--global-radius);
+    @include setSurface("container_highest");
+
+    & div[hide] {
+        display: none;
+    }
+
+    & [calendar-header] {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    & [mode-selector] {
+        width: fit-content;
+    }
+
+    & div[name='selectors'] {
+        display: flex;
+        width: 100%;
+        min-width: 290px;
+
+        & button[obi-button] {
+            border-radius: 0;
+            padding: 0;
+            justify-content: center;
+            align-items: center;
+
+            &:nth-child(2) {
+                display: flex;
+                justify-self: center;
+                align-items: center;
+                flex-grow: 1;
+            }
+        }
+
+        & div[name='month_selector'],
+        & div[name='year_selector'] {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+        }
+    }
+
+    & div[name='month_view'] {
+        display: grid;
+        justify-items: center;
+        grid-template-columns: auto auto auto auto auto auto auto;
+        padding: 16px;
+
+        // &[display] {
+        //     display: grid;
+        // }
+
+        & label {
+            width: 40px;
+            border-radius: 8px;
+            display: flex;
+            height: 40px;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+                @include setSurface("container");
+                cursor: pointer;
+            }
+
+            &.prev,
+            &.post {
+                opacity: 60%;
+            }
+
+            &.today {
+                @include setSurface("default");
+            }
+
+            &[selected] {
+                @include setColor("primary");
+            }
+        }
+    }
+
+    & div[name='week_view'] {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+
+        & .week-header {
+            display: grid;
+            grid-template-columns: 50px repeat(7, 150px);
+            text-align: center;
+
+            & span {
+                font-weight: 500;
+                font-size: 0.75rem;
+                letter-spacing: 0.25px;
+                opacity: 1;
+            }
+        }
+
+        & .week-days {
+            display: grid;
+            grid-template-columns: 50px repeat(7, 150px);
+            text-align: center;
+
+            & span {
+                padding: 16px;
+                font-weight: lighter;
+            }
+        }
+
+        & .week-events {
+            position: relative;
+            //border-bottom: 1px solid $neutral_alt;
+            max-height: 364px;
+            overflow: auto;
+
+            & [grid-ui] {
+                display: grid;
+                grid-template-columns: 50px repeat(7, 150px);
+                grid-template-rows: repeat(1440, 1px);
+                grid-auto-rows: 1px;
+
+                & div[column] {
+                    border-left: 1px solid $neutral_alt;
+                    grid-row: 1 / span 1440;
+                }
+
+                & div[row] {
+                    position: absolute;
+                    border-bottom: 1px solid $neutral_alt;
+                    grid-column: 1 / span 8;
+                }
+
+                & .hour-label {
+                    grid-column: 1;
+                    grid-row: span 60;
+                    font-weight: lighter;
+                    font-size: 0.8rem;
+                    letter-spacing: 0.25px;
+
+                    // grid-column: 1;
+                    // font-size: 0.75rem;
+                    // color: #888;
+                    // padding-right: 8px;
+                    // text-align: right;
+
+                    // // This centers the text vertically on the hour line
+                    // display: flex;
+                    // align-items: flex-start;
+                    // justify-content: flex-end;
+                    // transform: translateY(-8px);
+
+                    // // Placing labels exactly every 60 rows
+                    // @for $i from 0 through 23 {
+                    //     &:nth-of-type(#{$i + 1}) {
+                    //         grid-row: ($i * 60) + 1;
+                    //     }
+                    // }
+                }
+            }
+
+            & [events-container] {
+                position: absolute;
+                display: grid;
+                grid-template-columns: 50px repeat(7, 150px);
+                grid-template-rows: repeat(1440, 1px);
+                grid-auto-rows: 1px;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            & .now-bar {
+                border: solid 1px $info;
+                position: relative;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background-color: $info;
+                    left: -4px;
+                    top: -4px;
+                }
+            }
+
+            @for $i from 1 through 7 {
+                & [day='#{$i}'] {
+                    grid-column: #{$i + 1} / span 1;
+                }
+            }
+
+            @for $i from 0 through 1440 {
+                & [minute='#{$i}'] {
+                    grid-row: #{$i};
+                }
+            }
+        }
+    }
+
+    & div[name='months_section'] {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        max-height: 265px;
+        overflow: auto;
+
+        // &[display] {
+        //     display: flex;
+        // }
+
+        & label {
+            padding: 8px;
+            border-radius: var(--global-radius);
+
+            &[current] {
+                @include setSurface("default");
+            }
+
+            &:hover {
+                @include setSurface("container");
+                cursor: pointer;
+            }
+        }
+    }
+
+    & div[name='years_section'] {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        max-height: 265px;
+        overflow: auto;
+
+        // &[display] {
+        //     display: flex;
+        // }
+
+        & label {
+            padding: 8px;
+            border-radius: var(--global-radius);
+
+            &[current] {
+                @include setSurface("default");
+            }
+
+            &:hover {
+                @include setSurface("container");
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@include darkmode() {
+    div[obi-calendar] {
+        @include setSurface("container_highest", true);
+
+        & div[name='month_grid'] {
+
+            & label {
+
+                &:hover {
+                    @include setSurface("container", true);
+                }
+
+                &.today {
+                    @include setSurface("default", true);
+                }
+
+                &[selected] {
+                    @include setColor("primary", "dark");
+                }
+            }
+        }
+
+        & div[name='months_section'] {
+            & label {
+                &[current] {
+                    @include setSurface("default", true);
+                }
+
+                &:hover {
+                    @include setSurface("container", true);
+                }
+            }
+        }
+
+        & div[name='years_section'] {
+            & label {
+                &[current] {
+                    @include setSurface("default", true);
+                }
+
+                &:hover {
+                    @include setSurface("container", true);
+                }
+            }
+        }
+    }
+}
