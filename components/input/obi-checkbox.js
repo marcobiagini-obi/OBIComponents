@@ -36,33 +36,3 @@ defineComponent({
         }
     }
 });
-
-defineComponent({
-    selector: "obi-check-component",
-    template:
-        `<test-template name='OBI CHECKBOX' description='' :code='code' :data='value'>
-            <section actions slot='actions'>
-                <obi-select :valore='variante' label='Variante' :opzioni='varianti'></obi-select>
-                <obi-checkbox label='Disabilita' :valore='disabled' button></obi-checkbox>
-            </section>
-        </test-template>`,
-    options: {
-        dataset: {
-            value: false,
-            disabled: false,
-            variante: "",
-            varianti: [
-                { label: "checkbox", value: "" },
-                { label: "radio", value: "radio" },
-                { label: "toggle", value: "toggle" },
-                { label: "button", value: "button" },
-            ]
-        },
-        computed: {
-            code: function () {
-                let _disabled = this.disabled ? " disabled" : "";
-                return "<obi-checkbox :label='" + (this.value ? "checked" : "unchecked") + "' :valore='data' " + this.variante + _disabled + "></obi-checkbox>"
-            }
-        },
-    }
-});

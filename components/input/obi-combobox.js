@@ -6,7 +6,7 @@ defineComponent({
     selector: "obi-combobox",
     template:
         `<float-container obi-combobox :disabled="disabled">
-            <obi-textbox float-toggle @keyup='checkText' :variant='variant' :append='append' :prepend='prepend'
+            <obi-textbox float-toggle @keyup='checkText' :variant='variant' :append='append' :prepend='prepend' :icon='icon'
                 :label='label' :valore='selected_text' :messaggio='messaggio' :placeholder='placeholder' @click='select' :disabled="disabled">
             </obi-textbox>
             <obi-list floating-item interact variant='elevated'>
@@ -18,7 +18,7 @@ defineComponent({
             selected_text: "",
             first_render: true,
         },
-        inputs: ["opzioni", "label", "valore", "messaggio", "prepend", "append", "placeholder", "variant", "disabled"],
+        inputs: ["opzioni", "label", "valore", "messaggio", "prepend", "append", "placeholder", "variant", "disabled", "icon"],
         computed: {
             value: function () {
                 return this.valore;

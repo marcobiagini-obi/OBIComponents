@@ -6,7 +6,8 @@ defineComponent({
 	selector: "obi-textbox",
 	template: `<div obi-textbox :disabled='disabled'>
 	    <div text-input>
-		    <div cmd-if='$.prepend != null && $.prepend != ""' prepend>{{prepend}}</div> 
+        	<span cmd-if='$.icon != null && $.icon != ""' prepend class='material-symbols-outlined'>{{icon}}</span>
+		    <div cmd-elseif='$.prepend != null && $.prepend != ""' prepend>{{prepend}}</div> 
 		    <input :type='type' cmd-model='valore'
 				:placeholder='placeholder' :disabled="disabled" :empty='isEmpty'
 				@change='changedValue' @keyup='formatValue' @keydown='keyTrigger'
@@ -26,7 +27,7 @@ defineComponent({
 			type: "text",
 			invalid: false,
 		},
-		inputs: ["label", "valore", "messaggio", "prepend", "append", "placeholder", "type", "filter", "pattern", "format", "max", "min", "count", "disabled", "invalid"],
+		inputs: ["label", "valore", "messaggio", "prepend", "append", "icon", "placeholder", "type", "filter", "pattern", "format", "max", "min", "count", "disabled", "invalid"],
 		computed: {
 			value: function () {
 				let _reference = this.__node.reference[0];
@@ -123,81 +124,3 @@ export function checkValue(check, value) {
 	}
 	return true;
 }
-
-defineComponent({
-	selector: "obi-textbox-component",
-	template:
-		`<test-template name='OBI TEXTBOX' description='Casella di input testuale' :code='code'>
-            <section actions slot='actions'>
-                <obi-select :valore='type' label='Tipo' :opzioni='tipi'></obi-select>
-                <obi-select :valore='variante' label='Variante' :opzioni='varianti'></obi-select>
-                <obi-select :valore='pattern' label='Format' :opzioni='patterns'></obi-select>
-                <obi-textbox type='number' :valore='count' label='Count'></obi-textbox>
-                <obi-checkbox label='Placeholder' :valore='placeholder' button></obi-checkbox>
-                <obi-checkbox label='Richiesto' :valore='required' button></obi-checkbox>
-                <obi-checkbox label='Disabilita' :valore='disabled' button></obi-checkbox>
-                <obi-checkbox label='Prepend' :valore='prepend' button></obi-checkbox>
-                <obi-checkbox label='Append' :valore='append' button></obi-checkbox>
-                <obi-checkbox label='Group' :valore='group' button></obi-checkbox>
-                <obi-checkbox label='Multilinea' :valore='multiline' button></obi-checkbox>
-            </section>
-        </test-template>`,
-	options: {
-		dataset: {
-			variante: "",
-			varianti: [
-				{ label: "standard", value: "" },
-				{ label: "filled", value: "filled" },
-				{ label: "outlined", value: "outlined" }
-			],
-			disabled: false,
-			placeholder: false,
-			type: "",
-			tipi: [
-				{ label: "text", value: "" },
-				{ label: "number", value: "number" },
-				{ label: "password", value: "password" },
-			],
-			patterns: [
-				{ label: "Nessun Pattern", value: "" },
-				{ label: "Telefono", value: "###-###-####" },
-				{ label: "Data", value: "##/##/####" },
-			],
-			format: "",
-			prepend: false,
-			append: false,
-			required: false,
-			group: false,
-			count: 0,
-			multiline: false,
-		},
-		computed: {
-			code: function () {
-
-				let _variant = this.variante ? " variant='" + this.variante + "'" : "";
-				let _disabled = this.disabled ? " disabled" : "";
-				let _placeholder = this.placeholder ? " placeholder='Placeholder'" : "";
-				let _label = !this.placeholder ? " label='label'" : "";
-				let _type = this.type ? " type='" + this.type + "'" : "";
-				let _format = this.format ? " format='" + this.format + "'" : "";
-				let _message = this.format ? " messaggio='" + this.format + "'" : "";
-				let _prepend = this.prepend ? " prepend='+39'" : "";
-				let _append = this.append ? " append='€'" : "";
-				let _required = this.required ? " required" : "";
-				let _count = this.count ? " count='" + this.count + "'" : "";
-
-				return this.multiline ? "<obi-textarea></obi-textarea>" : this.group ? `<group-component>
-	<obi-textbox ` + _label + _variant + _disabled + _placeholder + _type + _format + _prepend + _append + _message + _required + _count + `></obi-textbox>
-	<obi-textbox ` + _label + _variant + _disabled + _placeholder + _type + _format + _prepend + _append + _message + _required + _count + `></obi-textbox>
-	<obi-button variant='filled'><obi-icon nome="search"></obi-icon></obi-button>
-</group-component>` :
-					"<obi-textbox " + _label + _variant + _disabled + _placeholder + _type + _format + _prepend + _append + _message + _required + _count + "></obi-textbox>"
-			}
-		},
-		actions: {
-			toggle: function (field) {
-				this[field] = !this[field];
-			}
-		},
-	}
-});

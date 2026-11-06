@@ -26,24 +26,3 @@ defineComponent({
         },
     }
 });
-/**TEST */
-defineComponent({
-    selector: "obi-breadcrumbs-component",
-    template:
-        `<test-template name='OBI BREADCRUMBS NAVIGATION' description='' :code='code' :data='pages'>
-        </test-template>`,
-    options: {
-        dataset: {
-            pages: [
-                { label: "Home", action: () => { alert("Home") } },
-                { label: "Components", action: () => { alert("Components") } },
-                { label: "breadcrumbs" },
-            ]
-        },
-        computed: {
-            code: function () {
-                return "<obi-breadcrumbs :path='data'></obi-breadcrumbs>";
-            }
-        }
-    }
-});

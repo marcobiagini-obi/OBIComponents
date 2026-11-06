@@ -67,38 +67,3 @@ defineComponent({
         ]
     }
 });
-
-defineComponent({
-    selector: "obi-slider-component",
-    template:
-        `<test-template name='OBI SELECT' description='' :code='code' :data='value'>
-            <section actions slot='actions'>
-                <obi-checkbox label='Disabilita' :valore='disabled' button></obi-checkbox>
-                <obi-checkbox label='Clean' :valore='clean' button></obi-checkbox>
-                <obi-checkbox label='Progress' :valore='progress' button></obi-checkbox>
-                <obi-checkbox label='Thin' :valore='thin' button></obi-checkbox>
-            </section>
-        </test-template>`,
-    options: {
-        dataset: {
-            value: 25,
-            disabled: false,
-            clean: false,
-            progress: false,
-            thin: false,
-        },
-        computed: {
-            code: function () {
-
-                let _disabled = this.disabled ? " disabled" : "";
-                let _clean = this.clean ? " clean" : "";
-                let _progress = this.progress ? " progress" : "";
-                let _thin = this.thin ? " thin" : "";
-
-                let code = "<obi-slider label='label' :valore='data'" + _clean + _progress + _thin + _disabled + "></obi-slider>";
-
-                return code
-            }
-        },
-    }
-});

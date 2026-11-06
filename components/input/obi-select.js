@@ -6,7 +6,8 @@ defineComponent({
     template:
         `<float-container obi-select :valid='$.valore != null && $.valore != 0 && $.valore != ""' :disabled="disabled">
 	        <div text-input :disabled="disabled" :invalid='!$.isValid()'>
-		        <div cmd-if='prepend' prepend>{{prepend}}</div>
+                <span cmd-if='icon' prepend class='material-symbols-outlined'>{{icon}}</span>
+		        <div cmd-elseif='prepend' prepend>{{prepend}}</div>
                 <label input float-toggle :disabled="disabled">{{selected}}</label>
 		        <label title for='input' cmd-if='$.label'>{{label}}</label>
 		        <div cmd-if='append' append>{{append}}</div>
@@ -27,7 +28,7 @@ defineComponent({
             search: "",
             timerSearch: 0,
         },
-        inputs: ["opzioni", "label", "valore", "messaggio", "prepend", "append", "placeholder", "disabled"],
+        inputs: ["opzioni", "label", "valore", "messaggio", "prepend", "append", "placeholder", "disabled", "icon"],
         computed: {
             selected: function () {
                 if (!isNaN(parseFloat(this.valore))) this.valore = parseFloat(this.valore);
@@ -77,50 +78,3 @@ defineComponent({
     }
 }
 );
-
-defineComponent({
-    selector: "obi-select-component",
-    template:
-        `<test-template name='OBI SELECT' description='' :code='code' :data='opzioni'>
-            <section actions slot='actions'>
-                <obi-checkbox label='Combobox' :valore='combobox' button></obi-checkbox>
-                <obi-checkbox label='Disabilita' :valore='disabled' button></obi-checkbox>
-                <obi-checkbox label='Prepend' :valore='prepend' button></obi-checkbox>
-                <obi-checkbox label='Append' :valore='append' button></obi-checkbox>
-            </section>
-        </test-template>`,
-    options: {
-        dataset: {
-            opzioni: [
-                { label: "elemento 1", value: 1 },
-                { label: "elemento 2", value: 2 },
-                { label: "elemento 3", value: 3 },
-            ],
-            variante: "",
-            varianti: [
-                { label: "standard", value: "" },
-                { label: "filled", value: "filled" },
-                { label: "outlined", value: "outlined" }
-            ],
-            disabled: false,
-            prepend: false,
-            append: false,
-            combobox: false,
-        },
-        computed: {
-            code: function () {
-
-                let _variant = this.variante ? " variant='" + this.variante + "'" : "";
-                let _disabled = this.disabled ? " disabled" : "";
-                let _label = !this.placeholder ? " label='label'" : "";
-                let _prepend = this.prepend ? " prepend='+39'" : "";
-                let _append = this.append ? " append='€'" : "";
-
-                let code = this.combobox ? "<obi-combobox valore='' " + _label + _variant + _disabled + _prepend + _append + " :opzioni='data'></obi-combobox>" :
-                    "<obi-select " + _label + _variant + _disabled + _prepend + _append + " :opzioni='data'></obi-select>";
-
-                return code
-            }
-        },
-    }
-});

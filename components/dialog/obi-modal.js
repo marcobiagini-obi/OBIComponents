@@ -44,38 +44,3 @@ defineComponent({
         }
     }
 });
-
-
-defineComponent({
-    selector: "obi-modal-component",
-    template:
-        `<test-template name='OBI MODAL' description='' :code='code' :data='data'>
-            <section actions slot='actions'>
-                <obi-button @click="$.display = !$.display" relevance="primary">SHOW MODAL</obi-button>
-                <obi-select :opzioni='dimensioni' :valore='size' label='Dimensioni'></obi-select>
-                <obi-checkbox label='Focus' :valore='focus' button></obi-checkbox>
-            </section>
-        </test-template>`,
-    options: {
-        dataset: {
-            data: { lorem_ipsum: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quam massa, imperdiet ut lobortis in, faucibus at felis. Nam in lorem suscipit, placerat ipsum non, finibus leo." },
-            focus: false,
-            dimensioni: [
-                { label: "standard", value: null },
-                { label: "file", value: "file" },
-                { label: "large", value: "large" },
-                { label: "cover", value: "cover" }],
-            size: "",
-            display: false,
-        },
-        computed: {
-            code: function () {
-                let _focus = this.focus ? "focus" : "";
-                let _size = this.size ? `size='${this.size}'` : "";
-                return `<obi-modal id='test_modal' ${_focus} ${_size} ${this.display ? "display" : ""}>
-    <obi-card titolo='Titolo Modale' :corpo='lorem_ipsum'></obi-card>
-</obi-modal>`;
-            },
-        },
-    }
-});

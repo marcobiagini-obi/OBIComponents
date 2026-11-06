@@ -1,4 +1,6 @@
-﻿export default {
+﻿import { BASE_URL } from "../../../obi.config.js";
+
+export default {
     id: "docs.lampredotto.render.comandi.model",
     nome: "RenderModule - Comando Model",
     sezioni: [

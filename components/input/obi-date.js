@@ -267,42 +267,6 @@ function parseDate(datestring, _default = null) {
     return _default;
 }
 
-defineComponent({
-    selector: "obi-date-component",
-    template:
-        `<test-template name='OBI DATE PICKER' description='' :code='code'>
-            <section actions slot='actions'>
-                <obi-select :valore='variante' label='Variante' :opzioni='varianti'></obi-select>
-                <obi-checkbox label='Disabilita' :valore='disabled' button></obi-checkbox>
-            </section>
-        </test-template>`,
-    options: {
-        dataset: {
-            variante: "",
-            varianti: [
-                { label: "standard", value: "" },
-                { label: "filled", value: "filled" },
-                { label: "outlined", value: "outlined" }
-            ],
-            disabled: false,
-        },
-        computed: {
-            code: function () {
-
-                let _variant = this.variante ? " variant='" + this.variante + "'" : "";
-                let _disabled = this.disabled ? " disabled" : "";
-
-                return "<obi-date label='label' " + _disabled + _variant + "></obi-date>"
-            }
-        },
-        actions: {
-            toggle: function (field) {
-                this[field] = !this[field];
-            }
-        },
-    }
-});
-
 export function stampDateIta(datetime) {
     try {
         if (datetime instanceof Date && datetime.getFullYear() != 9999 && datetime.getFullYear() != 1) {

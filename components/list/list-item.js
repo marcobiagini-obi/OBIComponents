@@ -6,13 +6,14 @@ defineComponent({
     selector: "list-item",
     template:
         `<div list-item :title='testo' @click='onSelect' :active='isChecked'>
-            <div prepend cmd-if='$.prepend != null'>{{prepend}}</div>
+            <span cmd-if='$.icon' prepend class='material-symbols-outlined'>{{icon}}</span>
+            <div prepend cmd-elseif='$.prepend != null'>{{prepend}}</div>
             <obi-title cmd-if='$.testo != null || $.descrizione != null' :titolo='testo' :descrizione='descrizione'></obi-title>
             <div append cmd-if='$.append != null'>{{append}}</div>
             <div append cmd-if='$.isSelectable'><obi-checkbox :valore='selezione' :radio='isRadio'></obi-checkbox></div>
         </div>`,
     options: {
-        inputs: ["testo", "descrizione", "prepend", "append", "selezione"],
+        inputs: ["testo", "descrizione", "prepend", "append", "selezione", "icon"],
         computed: {
             isSelectable: function () { return this.__element.hasAttribute("check"); },
             isRadio: function () { return this.__element.getAttribute("check") == "radio" },

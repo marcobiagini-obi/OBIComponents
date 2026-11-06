@@ -855,20 +855,6 @@ function formatTesto(text) {
     return linked;
 }
 
-defineComponent({
-    selector: "obi-chat-component",
-    template:
-        `<test-template name='OBI CHAT' description='' :code='code'>
-        </test-template>`,
-    options: {
-        computed: {
-            code: function () {
-                return `<obi-chat url='http://localhost:3000/Messages' user="mbiagini"></obi-chat>`;
-            }
-        }
-    }
-});
-
 function elaborateMessageTemplate(message, index, options) {
     let owner = message.idOwner == options.owner ?? 0;
     let isEditable = options.isEditable && owner;

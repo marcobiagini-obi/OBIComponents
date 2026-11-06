@@ -338,58 +338,6 @@ defineComponent({
 });
 //#endregion
 
-//#region TEST / DOCUMENTATION COMPONENT
-defineComponent({
-    selector: "obi-codeblock-component",
-    template: `
-        <test-template name="OBI CODEBLOCK" note="Casella di input per codice sorgente con evidenziazione sintattica e formattazione per JSON, JavaScript, CSS, HTML, Visual Basic, C# e SQL" :code="sampleCode">
-            <section actions slot="actions">
-                <obi-select :valore="sampleLang" label="Linguaggio" :opzioni="langOptions" @changed="onLangSelect"></obi-select>
-                <obi-checkbox label="Disabilitato" :valore="sampleDisabled" button></obi-checkbox>
-                <obi-checkbox label="Solo Lettura" :valore="sampleReadonly" button></obi-checkbox>
-                <div style="margin-top: 16px; width: 100%;">
-                    <obi-codeblock
-                        :language="sampleLang"
-                        :valore="sampleCode"
-                        :label="'Editor ' + sampleLang.toUpperCase()"
-                        :disabled="sampleDisabled"
-                        :readonly="sampleReadonly"
-                        height="320px"></obi-codeblock>
-                </div>
-            </section>
-        </test-template>
-    `,
-    options: {
-        dataset: {
-            sampleLang: "javascript",
-            sampleDisabled: false,
-            sampleReadonly: false,
-            langOptions: SUPPORTED_LANGUAGES,
-            samples: {
-                json: '{\n  "app": "OBIComponents",\n  "version": "2.0.0",\n  "features": ["highlighting", "formatting", "line-numbers"],\n  "languages": ["json", "javascript", "css", "html", "vb", "c#", "sql"]\n}',
-                javascript: 'function calculateDiscount(price, percentage) {\n  if (percentage <= 0) return price;\n  const discount = (price * percentage) / 100;\n  return Number((price - discount).toFixed(2));\n}',
-                css: '.obi-card {\n  display: flex;\n  flex-direction: column;\n  padding: 16px;\n  background-color: #ffffff;\n  border-radius: 8px;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n}',
-                html: '<div class="product-item" data-id="101">\n  <h2 class="title">Trapano Avvitatore</h2>\n  <span class="price">€ 89,90</span>\n  <button type="button" class="btn-buy">Aggiungi al carrello</button>\n</div>',
-                vb: 'Public Function CalcolaPrezzoIvato(ByVal prezzoNetto As Double, ByVal aliquotaIva As Double) As Double\n    Dim totaleIva As Double = (prezzoNetto * aliquotaIva) / 100\n    Return prezzoNetto + totaleIva\nEnd Function',
-                "c#": 'using System;\n\nnamespace ObiApp\n{\n    public class Articolo\n    {\n        public int Codice { get; set; }\n        public string Descrizione { get; set; }\n        public decimal Prezzo { get; set; }\n    }\n}',
-                sql: 'SELECT a.Codice, a.Descrizione, a.Prezzo, c.NomeCategoria\nFROM Articoli a\nINNER JOIN Categorie c ON a.IdCategoria = c.Id\nWHERE a.Attivo = 1 AND a.Prezzo > 50\nORDER BY a.Prezzo DESC\nLIMIT 20;'
-            }
-        },
-        computed: {
-            sampleCode() {
-                return this.samples[this.sampleLang] || this.samples.javascript;
-            }
-        },
-        actions: {
-            onLangSelect(evt) {
-                const val = evt && evt.value ? evt.value : evt;
-                if (val) this.sampleLang = val;
-            }
-        }
-    }
-});
-//#endregion
-
 //#region CODE FORMATTERS
 export function formatCode(code, language) {
     if (!code || !code.trim()) return code;

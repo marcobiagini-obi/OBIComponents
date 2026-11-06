@@ -1,4 +1,6 @@
-﻿export default
+﻿import { BASE_URL } from "../../../obi.config.js";
+
+export default
     {
         id: "docs.lampredotto.server",
         nome: "Modulo di Connessione al Server",

@@ -86,37 +86,3 @@ defineComponent({
         events: [],
     }
 });
-
-defineComponent({
-    selector: "obi-form-component",
-    template:
-        `<test-template name='OBI FORM' :code='code' :data='model'></test-template>`,
-    options: {
-        dataset: {
-            model: {
-                nome: "",
-                cognome: "",
-                genere: 0,
-                opzioni: [
-                    { label: "Seleziona un genere", value: 0 },
-                    { label: "Maschio", value: 1 },
-                    { label: "Femmina", value: 2 },
-                    { label: "Altro", value: 3 },
-                ]
-            }
-        },
-        computed: {
-            code: function () {
-                return `<obi-form :modello="data" @error="errorEvent" @success="successEvent" @close='closeEvent'>
-    <div slot="inputForm">
-        <group-component>
-            <obi-textbox label="Nome" :valore="data.nome" required='required'></obi-textbox>
-            <obi-textbox label="Cognome" :valore="data.cognome"></obi-textbox>
-        </group-component>
-        <obi-select label="Genere" :opzioni="data.opzioni" :valore="data.genere"></obi-select>
-    </div>
-</obi-form>`
-            }
-        }
-    }
-});

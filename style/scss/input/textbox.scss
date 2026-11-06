@@ -133,7 +133,8 @@ div[obi-textarea] {
         padding-top: 8px;
         cursor: text;
 
-        & div[prepend] {
+        & div[prepend],
+        span[prepend] {
             padding-left: 12px;
             height: 36px;
             display: flex;

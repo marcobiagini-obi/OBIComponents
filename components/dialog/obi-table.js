@@ -243,49 +243,6 @@ defineComponent({
     }
 });
 
-defineComponent({
-    selector: "obi-table-component",
-    template:
-        `<test-template name='OBI DATA TABLE' description='' :code='code' :data='table'>
-        </test-template>`,
-    options: {
-        dataset: {
-            table: {
-                list: elabData(1000),
-                columns: ["id", "nome", "datetime"],
-            },
-            filtro: [],
-            model: {
-                nome: "",
-                datetime: null,
-            }
-        },
-        computed: {
-            dataset: {
-                limit: 50,
-            },
-            code: function () {
-                return `
-<obi-table :dati='data.list' :colonne='data.columns' :filtro='data.filtro'></obi-table>`;
-            },
-        },
-    }
-});
-
-function randomDate() {
-    return new Date(Math.random() * (2024 - 2020 + 1) + 2020,
-        Math.random() * (12) + 1,
-        Math.random() * (29) + 1);
-}
-
-function elabData(limit) {
-    var list = [];
-    for (let i = 0; i < limit; i++) {
-        list.push({ id: i, nome: Support.uniqueID(), datetime: randomDate() });
-    }
-    return list;
-}
-
 function dataFilter(list, filters) {
     return list.filter(e => {
         let or = [];

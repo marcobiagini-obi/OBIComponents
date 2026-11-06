@@ -14,6 +14,6 @@
  *   export const API_URL  = "https://your-server.example.com/serviziweb";
  */
 
-export const BASE_URL = "";  // e.g. "https://your-server.example.com/_webframework/OBIComponents"
-export const API_URL  = "";  // e.g. "https://your-server.example.com/serviziweb"
+export const BASE_URL = "http://swita000006.de.obi.net/_webframework/OBIComponents";  // e.g. "https://your-server.example.com/_webframework/OBIComponents"
+export const API_URL = "http://swita000006.de.obi.net/serviziweb";  // e.g. "https://your-server.example.com/serviziweb"
 

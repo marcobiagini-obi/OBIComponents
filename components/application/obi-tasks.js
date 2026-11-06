@@ -143,7 +143,7 @@ defineComponent({
                 if (index !== -1) {
                     message.attributi.splice(index, 1, Message.instanceAttribute({ title: "Risolto", icona: "check_circle", relevance: "neutral", event: "uncomplete" }));
                 }
-                await loadApi("${API_URL}/obicomunicazioni/scripts/services/messaggi.service.js", async (Service) => {
+                await loadApi(`${API_URL}/obicomunicazioni/scripts/services/messaggi.service.js`, async (Service) => {
                     const service = new Service();
                     await service.editMessaggio(new Message(message));
                 });
@@ -157,7 +157,7 @@ defineComponent({
                 if (index !== -1) {
                     message.attributi.splice(index, 1, Message.instanceAttribute({ label: "Risolvi", relevance: "success", variant: "filled", event: "complete" }));
                 }
-                await loadApi("${API_URL}/obicomunicazioni/scripts/services/messaggi.service.js", async (Service) => {
+                await loadApi(`${API_URL}/obicomunicazioni/scripts/services/messaggi.service.js`, async (Service) => {
                     const service = new Service();
                     await service.editMessaggio(new Message(message));
                 });
@@ -167,9 +167,9 @@ defineComponent({
                 if (this.chatElement?.chat.model) this.chatElement.chat.model.messaggi++;
             },
             async onMention(mention) {
-                await loadApi("${API_URL}/obiComunicazioni/Scripts/Services/notifiche.service.js",
-                    "${API_URL}/obihub/scripts/services/tasks.service.js",
-                    "${API_URL}/obihub/scripts/services/progetti.service.js",
+                await loadApi(`${API_URL}/obiComunicazioni/Scripts/Services/notifiche.service.js`,
+                    `${API_URL}/obihub/scripts/services/tasks.service.js`,
+                    `${API_URL}/obihub/scripts/services/progetti.service.js`,
                     async (NotificheService, TaskService, ProgettiService) => {
                         const notificheService = new NotificheService();
                         const progettiService = new ProgettiService();
@@ -390,7 +390,7 @@ defineComponent({
                     return null;
                 });
                 if (response) {
-                    const TaskModel = await loadApi("${API_URL}/obihub/scripts/models/task.model.js");
+                    const TaskModel = await loadApi(`${API_URL}/obihub/scripts/models/task.model.js`);
                     this.tasks = TaskModel ? response.map(e => new TaskModel(e)) : response;
                 } else {
                     this.tasks = SAMPLE_TASKS;;
@@ -419,7 +419,7 @@ defineComponent({
             },
             async loadArchivedTasks() {
                 if (!Number(this.progetto ?? 0)) return;
-                await loadApi("${API_URL}/obihub/scripts/models/task.model.js", async (TaskModel) => {
+                await loadApi(`${API_URL}/obihub/scripts/models/task.model.js`, async (TaskModel) => {
                     const url = `${API_URL}/obihub/api/progetti/${this.progetto}/tasks/archived`;
                     let response = await fetch(url).then(res => res.json()).catch(err => console.error(err));
                     if (response) {
@@ -430,7 +430,7 @@ defineComponent({
             },
             async loadPublishedTasks() {
                 if (!Number(this.progetto ?? 0)) return;
-                await loadApi("${API_URL}/obihub/scripts/models/task.model.js", async (TaskModel) => {
+                await loadApi(`${API_URL} /obihub/scripts/models/task.model.js`, async (TaskModel) => {
                     const url = `${API_URL}/obihub/api/progetti/${this.progetto}/tasks/published`;
                     let response = await fetch(url).then(res => res.json()).catch(err => console.error(err));
                     if (response) {
@@ -451,8 +451,8 @@ defineComponent({
                     obiAlert("Effettuare il login per inviare una richiesta", { type: "warning" });
                     return;
                 }
-                await loadApi("${API_URL}/obihub/scripts/services/tasks.service.js",
-                    "${API_URL}/obihub/scripts/models/task.model.js", async (Service, taskModel) => {
+                await loadApi(`${API_URL}/obihub/scripts/services/tasks.service.js`,
+                    `${API_URL}/obihub/scripts/models/task.model.js`, async (Service, taskModel) => {
                         const taskService = new Service();
                         let task = new taskModel({
                             ...data,
@@ -502,7 +502,7 @@ defineComponent({
 export async function instanceChat(task, chatElement) {
     if (!task || !chatElement) return null;
 
-    const owner = await loadApi("${API_URL}/obihub/scripts/services/utenti.service.js", async (Service) => {
+    const owner = await loadApi(`${API_URL}/obihub/scripts/services/utenti.service.js`, async (Service) => {
         const userService = new Service();
         let owner = await userService.getUtente(task.idOwner);
         if (!owner) return null;

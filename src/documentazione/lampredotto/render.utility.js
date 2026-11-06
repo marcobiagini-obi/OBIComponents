@@ -1,4 +1,5 @@
-﻿
+﻿import { BASE_URL } from "../../../obi.config.js";
+
 export default {
     id: "docs.lampredotto.render.utility",
     nome: "RenderModule - Utilità",

@@ -1,4 +1,5 @@
 ﻿import { defineComponent } from "../LAMP/RenderModule/LampRender.js";
+import { BASE_URL } from "../obi.config.js";
 
 defineComponent({
     selector: "demo-component",
@@ -46,7 +47,7 @@ defineComponent(
         },
         actions: {
             autoUpdate() {
-                if (!this.refreshTimer && this.pendingChanges) { 
+                if (!this.refreshTimer && this.pendingChanges) {
                     this.update();
                     this.pendingChanges = false;
                     this.refreshTimer = setTimeout(() => {
@@ -58,11 +59,11 @@ defineComponent(
                 } else { this.pendingChanges = true; }
             },
             update() {
-                    try {
+                try {
 
-                        if (this.__element) {
-                            let iframe = this.__element.querySelector("iframe");
-                            var html = `${document.head.outerHTML}
+                    if (this.__element) {
+                        let iframe = this.__element.querySelector("iframe");
+                        var html = `${document.head.outerHTML}
     <body>
         <div id='compApp'>
             <test-demo></test-demo>
@@ -73,14 +74,14 @@ defineComponent(
             RenderEngine.instance.start("compApp").build();
         </scr`+ `ipt>
     </body>`;
-                            iframe.contentWindow.document.open();
-                            iframe.contentWindow.document.write(html);
-                            iframe.contentWindow.document.close();
-                            sessionStorage.setItem("compDemo", this.code);
-                        }
-                    } catch (ex) {
-                        console.error("Test.Component - " + ex);
+                        iframe.contentWindow.document.open();
+                        iframe.contentWindow.document.write(html);
+                        iframe.contentWindow.document.close();
+                        sessionStorage.setItem("compDemo", this.code);
                     }
+                } catch (ex) {
+                    console.error("Test.Component - " + ex);
+                }
             }
         },
         events: [
@@ -88,7 +89,7 @@ defineComponent(
                 name: "progress",
                 action: function (state) {
                     if (state == "mounted") {
-                        if(sessionStorage.getItem("compDemo") != null) this.code = sessionStorage.getItem("compDemo");    
+                        if (sessionStorage.getItem("compDemo") != null) this.code = sessionStorage.getItem("compDemo");
                         this.update();
                     }
                 }
@@ -142,11 +143,11 @@ defineComponent({
         },
         actions: {
             autoUpdate() {
-                if (!this.refreshTimer && this.pendingChanges) { 
+                if (!this.refreshTimer && this.pendingChanges) {
                     this.update();
                     this.pendingChanges = false;
                     this.refreshTimer = setTimeout(() => {
-                        this.refreshTimer = null; 
+                        this.refreshTimer = null;
                         if (this.pendingChanges) {
                             this.update();
                         }
@@ -212,7 +213,7 @@ defineComponent({
                 name: "progress",
                 action: function (state) {
                     if (state == "mounted") {
-                        if(sessionStorage.getItem("appDemo") != null) this.code = sessionStorage.getItem("appDemo");    
+                        if (sessionStorage.getItem("appDemo") != null) this.code = sessionStorage.getItem("appDemo");
                         this.update();
                     }
                 }
