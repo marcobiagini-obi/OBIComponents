@@ -55,6 +55,7 @@ import "./components/interface/obi-label.js";
 import "./components/interface/obi-sideview.js";
 import "./components/interface/obi-loader.js";
 import "./components/interface/obi-calendar.js";
+import "./components/interface/obi-gantt.js";
 //#endregion
 //#region NAVIGATION
 import "./components/navigation/obi-nav.js";

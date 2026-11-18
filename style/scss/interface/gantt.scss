@@ -1,0 +1,247 @@
+@import "../.res/shadows.scss";
+@import "../.res/colors.scss";
+@import "../.res/variants.scss";
+
+// ── Variables ────────────────────────────────────────────────────────────────
+$gantt-label-width: 160px;
+$gantt-row-height: 48px;
+$gantt-header-height: 36px;
+$gantt-bar-height: 24px;
+$gantt-list-width: 360px;
+
+// ── Root container ────────────────────────────────────────────────────────────
+div[obi-gantt] {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    gap: 8px;
+
+    // ── Filter bar ────────────────────────────────────────────────────────────
+    div[gantt-filters] {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 16px;
+        border-radius: var(--global-radius);
+    }
+
+    // ── Body (chart + list side-by-side) ──────────────────────────────────────
+    div[gantt-body] {
+        overflow: auto;
+        flex-grow: 1;
+        align-items: flex-start;
+        min-height: 0;
+    }
+
+    // ── Gantt chart panel (left) ──────────────────────────────────────────────
+    div[gantt-chart] {
+        display: flex;
+        position: sticky;
+        top: 0;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow: hidden;
+        @include setSurface("container_low");
+        border-radius: var(--global-radius) 0 0 var(--global-radius);
+
+        // Timeline header
+        div[gantt-timeline-header] {
+            display: flex;
+            flex-direction: row;
+            height: $gantt-header-height;
+            min-height: $gantt-header-height;
+            @include setSurface("container_hight");
+
+            // empty slot that mirrors the label column in rows
+            div[gantt-row-name-col] {
+                flex-shrink: 0;
+                width: $gantt-label-width;
+            }
+
+            div[gantt-ticks-wrap] {
+                position: relative;
+                flex-grow: 1;
+                overflow: hidden;
+
+                span[gantt-tick] {
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: .7rem;
+                    opacity: .7;
+                    white-space: nowrap;
+                    pointer-events: none;
+                    padding: 0 2px;
+                }
+
+                // "Today" marker tick in the header
+                div[gantt-today-tick] {
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    width: 2px;
+                    background: var(--obi-danger, #d32f2f);
+                    opacity: .6;
+                    pointer-events: none;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        // Scrollable rows area
+        div[gantt-rows-container] {
+            position: relative;
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            // "Today" vertical bar overlaid on the rows
+            div[gantt-today-bar] {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: var(--obi-danger, #d32f2f);
+                opacity: .4;
+                pointer-events: none;
+                z-index: 1;
+            }
+        }
+    }
+
+    // ── Task list panel (right) ───────────────────────────────────────────────
+    div[gantt-list] {
+        flex-shrink: 0;
+        width: $gantt-list-width;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 4px;
+        @include setSurface("container_lowest");
+        border-radius: 0 var(--global-radius) var(--global-radius) 0;
+
+        div[gantt-list-item] {
+            cursor: pointer;
+            border-radius: var(--global-radius);
+            transition: box-shadow 0.2s ease, outline 0.2s ease;
+            outline: 2px solid transparent;
+
+            &:hover {
+                @include setShadow(1);
+            }
+
+            // Highlight animation when jumped-to from Gantt click
+            &[gantt-highlight] {
+                outline-color: var(--obi-primary, #1565c0);
+                animation: gantt-highlight-pulse 1.8s ease-out;
+            }
+        }
+    }
+}
+
+// ── Gantt row ─────────────────────────────────────────────────────────────────
+div[obi-gantt-row] {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: $gantt-row-height;
+    border-bottom: 1px solid rgba(0, 0, 0, .05);
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+        @include setSurface("container");
+    }
+
+    span[gantt-row-label] {
+        flex-shrink: 0;
+        width: $gantt-label-width;
+        padding: 0 10px;
+        font-size: .78rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-right: 1px solid rgba(0, 0, 0, .08);
+    }
+
+    div[gantt-bar-track] {
+        flex-grow: 1;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+
+        div[gantt-bar] {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: $gantt-bar-height;
+            border-radius: 4px;
+            min-width: 4px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            opacity: .88;
+            transition: opacity 0.15s ease, filter 0.15s ease;
+
+            &:hover {
+                opacity: 1;
+                filter: brightness(1.1);
+            }
+
+            span[gantt-bar-text] {
+                font-size: .68rem;
+                padding: 0 6px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+// ── Highlight keyframe ────────────────────────────────────────────────────────
+@keyframes gantt-highlight-pulse {
+    0% {
+        outline-color: var(--obi-primary, #1565c0);
+        box-shadow: 0 0 0 4px rgba(21, 101, 192, .3);
+    }
+
+    70% {
+        outline-color: var(--obi-primary, #1565c0);
+        box-shadow: 0 0 0 4px rgba(21, 101, 192, .1);
+    }
+
+    100% {
+        outline-color: transparent;
+        box-shadow: none;
+    }
+}
+
+@include darkmode() {
+    & div[obi-gantt] {
+        div[gantt-chart] {
+            @include setSurface("container_low", true);
+
+            // Timeline header
+            div[gantt-timeline-header] {
+                @include setSurface("container_hight", true);
+            }
+        }
+
+        div[gantt-list] {
+            @include setSurface("container_lowest", true);
+        }
+
+        div[obi-gantt-row] {
+            &:hover {
+                @include setSurface("container", true);
+            }
+        }
+    }
+}

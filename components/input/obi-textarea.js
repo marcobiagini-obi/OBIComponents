@@ -347,7 +347,7 @@ defineComponent(
 
 					const me = this;
 					loadApi(`${BASE_URL}/src/models/EmailRequest.js`, async (EmailRequest) => {
-						const url = `${API_URL}/obiHub/api/Hub/Email`;
+						const url = `${API_URL}/OBIComunicazioni/api/Email`;
 						for (let cmd of commands) {
 							switch (cmd.type) {
 								case "mailto":

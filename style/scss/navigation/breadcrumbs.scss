@@ -4,19 +4,17 @@
 ul[obi-breadcrumbs] {
     appearance: unset;
     -webkit-appearance: unset;
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 8px;
-    margin: 0;
+    justify-content: flex-end;
+    margin: unset;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
     border-radius: var(--global-radius);
     @include unprintable();
     @include sizes();
-    z-index: $layer_3;
 
     & li {
         display: inline;
-        padding-right: 8px;
 
         &+li::before {
             content: "/\00a0";

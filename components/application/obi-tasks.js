@@ -256,8 +256,8 @@ defineComponent({
     selector: "obi-tasks-view",
     template: `<section obi-tasks>
         <obi-card style='margin: 0; border-radius: unset; flex-grow: 1; max-height: 90vh'>
-            <card-header :prepend='prependSupport' titolo='RICHIESTE' margin='sm'>
-                <obi-button cmd-if='$.currentUser != null && $.progetto > 0' relevance='secondary' @click='openRequest'><obi-icon nome='add_diamond' title='Nuova Richiesta'></obi-icon></obi-button>
+            <card-header :prepend='prependSupport' :titolo='"RICHIESTE " + $.nomeProgetto' margin='sm'>
+                <obi-button cmd-if='$.currentUser != null && $.progetto > 0' relevance='secondary' @click='openRequest' prepend='add' label='Nuova'></obi-button>
             </card-header>
             <card-body gap='sm' padding='sm'>
                 <div display-row='wrap' gap='sm'>
@@ -265,7 +265,16 @@ defineComponent({
                     <obi-chip label='Nuove' @click='setFilter' data-value='requested' :variant='$.filter == "requested" ? "filled" : "outlined"' relevance='primary' interactable></obi-chip>
                     <obi-chip label='In Corso' @click='setFilter' data-value='approved' :variant='$.filter == "approved" ? "filled" : "outlined"' relevance='primary' interactable></obi-chip>
                     <obi-chip label='Pubblicate' @click='setFilter' data-value='published' :variant='$.filter == "published" ? "filled" : "outlined"' relevance='primary' interactable></obi-chip>
-                    <obi-chip @click='setFilter' data-value='trash' :variant='$.filter == "trash" ? "filled" : "outlined"' relevance='danger' interactable title='Richieste Archiviate'><obi-icon nome='delete'></obi-icon></obi-chip>
+                    <obi-chip title='Rifiutate' @click='setFilter' data-value='trash' :variant='$.filter == "trash" ? "filled" : "outlined"' relevance='neutral' interactable><obi-icon nome='archive'></obi-icon></obi-chip>
+                    <div flex-size='auto'></div>
+                    <float-container element='obi-tasks'>
+                        <obi-button icon float-toggle @click='loadTasks'>
+                            <obi-icon nome='sort' title='Ordina per'></obi-icon>
+                        </obi-button>
+                        <obi-list floating-item="bottom right" interact variant='elevated'>
+                            <list-item cmd-for='item in sortOptions' :icon="item.selected" :data-value='item.value' @click='updateSort'>{{item.label}}</list-item>
+                        </obi-list>
+                    </float-container>
                 </div>
                 <obi-chiplist label='Filtra per Tag' :options='tagsListOptions' :valore='tagsFilter'></obi-chiplist>
                 <div @scroll='onTasksScroll' display-grid gap='xs' style='overflow-y: auto;'>
@@ -281,6 +290,7 @@ defineComponent({
                         <obi-textbox label='Titolo' :valore='requestData.nome' count='50' required='required'></obi-textbox>
                         <obi-textarea label='Descrizione' :valore='requestData.note' righe='4' required='required' :messaggio='bugWarning'></obi-textarea>
                         <obi-checkbox label='Segnala un Errore di Sistema' :valore='requestData.isBug' toggle></obi-checkbox>
+                        <obi-checkbox label='Segnala come Urgente' :valore='requestData.isUrgent' toggle></obi-checkbox>
                     </div>
                 </obi-form>
             </obi-card>
@@ -290,8 +300,10 @@ defineComponent({
         inputs: ["progetto"],
         dataset: {
             progetto: 0,
+            nomeProgetto: "",
             displayRequest: null,
             filter: "",
+            sort: { param: "insertTime", desc: true },
             tagsFilter: [],
             requestData: {
                 idProgetto: 0,
@@ -299,8 +311,16 @@ defineComponent({
                 nome: "",
                 note: "",
                 tags: "",
-                isBug: false
+                isBug: false,
+                isUrgent: false,
             },
+            sortOptions: [
+                { value: 1, label: "Più Recente", sort: "insertTime", desc: true, selected: "check" },
+                { value: 2, label: "Meno Recente", sort: "insertTime", desc: false, selected: "" },
+                { value: 3, label: "Meno Avanzato", sort: "idStato", desc: false, selected: "" },
+                { value: 4, label: "Più Avanzato", sort: "idStato", desc: true, selected: "" },
+                { value: 5, label: "Scadenza", sort: "deadline", desc: true, selected: "" },
+            ],
             tasks: [],
             loadedTasksCount: 10,
         },
@@ -321,17 +341,8 @@ defineComponent({
                     filtered = this.tasks.filter(t => t.idOwner === currentUserId);
                 } else if (this.filter === 'approved') {
                     filtered = this.tasks.filter(t => t.idStato === 3);
-                    filtered.sort((a, b) => {
-                        // 1. Handle cases where one or both deadlines are missing (null/undefined)
-                        if (!a.deadline) return !b.deadline ? 0 : 1;
-                        if (!b.deadline) return -1;
-
-                        // 2. ASCENDING: Swap a and b so the earliest date comes first
-                        return new Date(a.deadline) - new Date(b.deadline);
-                    });
                 } else if (this.filter === 'requested') {
                     filtered = this.tasks.filter(t => t.idStato === 1);
-                    filtered.sort((a, b) => new Date(a.insertTime) - new Date(b.insertTime));
                 } else if (this.filter === 'published') {
                     filtered = this.tasks.filter(t => t.idStato === 5);
                 } else if (this.filter === 'trash') {
@@ -346,6 +357,32 @@ defineComponent({
                             .split(',')
                             .map(tag => tag.trim());
                         return lowerTagsFilter.every(tag => taskTags.includes(tag));
+                    });
+                }
+
+                if (this.sort && this.sort.param) {
+                    const { param, desc } = this.sort;
+                    filtered.sort((a, b) => {
+                        const valA = a[param];
+                        const valB = b[param];
+
+                        if (param === "insertTime" || param === "deadline") {
+                            const timeA = valA == null ? NaN : new Date(valA).getTime();
+                            const timeB = valB == null ? NaN : new Date(valB).getTime();
+                            if (!Number.isFinite(timeA)) return Number.isFinite(timeB) ? 1 : 0;
+                            if (!Number.isFinite(timeB)) return -1;
+                            return desc ? timeB - timeA : timeA - timeB;
+                        }
+
+                        if (valA == null || valB == null) {
+                            if (valA == null && valB == null) return 0;
+                            return valA == null ? 1 : -1;
+                        }
+
+                        const cmp = typeof valA === "string" || typeof valB === "string"
+                            ? String(valA).localeCompare(String(valB))
+                            : Number(valA) - Number(valB);
+                        return desc ? -cmp : cmp;
                     });
                 }
 
@@ -417,6 +454,21 @@ defineComponent({
                     }
                 }
             },
+            updateSort(evt) {
+                const target = evt.currentTarget;
+                const value = target.getAttribute("data-value");
+                if (value) {
+                    for (let e of this.sortOptions) {
+                        e.selected = "";
+                        if (e.value == value) {
+                            e.selected = "check";
+                            this.sort = { param: e.sort, desc: e.desc };
+                            if (this.filter === "trash") this.loadArchivedTasks();
+                            if (this.filter === "published") this.loadPublishedTasks();
+                        }
+                    }
+                }
+            },
             async loadArchivedTasks() {
                 if (!Number(this.progetto ?? 0)) return;
                 await loadApi(`${API_URL}/obihub/scripts/models/task.model.js`, async (TaskModel) => {
@@ -430,7 +482,7 @@ defineComponent({
             },
             async loadPublishedTasks() {
                 if (!Number(this.progetto ?? 0)) return;
-                await loadApi(`${API_URL} /obihub/scripts/models/task.model.js`, async (TaskModel) => {
+                await loadApi(`${API_URL}/obihub/scripts/models/task.model.js`, async (TaskModel) => {
                     const url = `${API_URL}/obihub/api/progetti/${this.progetto}/tasks/published`;
                     let response = await fetch(url).then(res => res.json()).catch(err => console.error(err));
                     if (response) {
@@ -440,7 +492,6 @@ defineComponent({
                 });
             },
             openRequest() {
-                this.requestData = { idProgetto: this.progetto, idStato: 1, nome: "", note: "", tags: "", isBug: false };
                 this.modalForm?.open();
             },
             closeRequest() {
@@ -451,29 +502,46 @@ defineComponent({
                     obiAlert("Effettuare il login per inviare una richiesta", { type: "warning" });
                     return;
                 }
+                const me = this;
                 await loadApi(`${API_URL}/obihub/scripts/services/tasks.service.js`,
                     `${API_URL}/obihub/scripts/models/task.model.js`, async (Service, taskModel) => {
+                        let listaTags = [];
+                        if (me.requestData.isBug) listaTags.push("debug");
+                        if (me.requestData.isUrgent) listaTags.push("urgente");
+
                         const taskService = new Service();
                         let task = new taskModel({
                             ...data,
-                            idProgetto: this.progetto,
+                            idProgetto: me.progetto,
                             idStato: 1,
-                            idOwner: this.currentUser?.id,
+                            idOwner: me.currentUser?.id,
                             timeStamp: new Date(),
-                            tags: data.isBug ? "Debug" : ""
+                            tags: listaTags.join(","),
                         });
                         task = await taskService.createTask(task);
-                        this.tasks.unshift(task);
-                        this.closeRequest();
+                        me.tasks.unshift(task);
+                        me.requestData = { idProgetto: me.progetto, idStato: 1, nome: "", note: "", tags: "", isBug: false, isUrgent: false };
+                        me.closeRequest();
                     });
             },
             getTagsList() {
                 const tags = this.tasks.flatMap(t => (t.tags || '').split(',').map(s => s.trim()).filter(s => s !== ''));
                 return [...new Set(tags)];
-            }
+            },
+            async loadProgettoInfo() {
+                const idProgetto = Number(this.progetto);
+                if (!idProgetto || isNaN(idProgetto)) return "";
+                const me = this;
+                await loadApi(`${API_URL}/obihub/scripts/services/progetti.service.js`, async (progettiService) => {
+                    let service = new progettiService();
+                    let progetto = await service.getProgetto(me.progetto);
+                    me.nomeProgetto = progetto.nome;
+                });
+            },
         },
         events: [
             asyncDataLoader.call(this, async function () {
+                this.loadProgettoInfo();
                 await this.loadTasks();
             }),
         ]
@@ -486,7 +554,7 @@ defineComponent({
             <obi-button tool-item relevance="brand" icon float-toggle @click='loadTasks'>
                 <obi-icon nome='task_alt' title='Supporto e Richieste'></obi-icon>
             </obi-button>
-            <obi-tasks-view :progetto='progetto' floating-item='bottom right' rounded variant="elevated" style='width: 700px;'></obi-tasks-view>
+            <obi-tasks-view :progetto='progetto' floating-item='bottom right' rounded variant="elevated" style='width: 900px;'></obi-tasks-view>
         </float-container>
         <obi-task-chat></obi-task-chat>`,
     options: {

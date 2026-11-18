@@ -17,6 +17,7 @@
 @import url("compiled/unit.test.min.css");
 @import url("compiled/splashscreen.min.css");
 @import url("compiled/calendar.min.css");
+@import url("compiled/gantt.min.css");
 /* INPUT */
 @import url("compiled/button.min.css");
 @import url("compiled/textbox.min.css");

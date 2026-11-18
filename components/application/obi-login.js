@@ -3,6 +3,8 @@ import { Collection } from "../../LAMP/RenderModule/modules/enumerators.js";
 import { sendEmailToAssistenza } from "../../src/support.js";
 import { obiAlert } from "../../core.js";
 
+import { BASE_URL } from "../../obi.config.js";
+
 const loginKeywords = {
     portale: "portale",
     action: "action",
@@ -52,7 +54,6 @@ defineComponent({
             portale: new URLSearchParams(window.location.search).get(loginKeywords.portale) || "Servizi OBI",
             username: "",
             password: "",
-            image: "${BASE_URL}/resources/images/backgroundOBI.jpg",
             modello: {
                 nome: "",
                 cognome: "",
@@ -62,6 +63,7 @@ defineComponent({
         },
         computed: {
             modal: function () { return this.__node.getChildContext("obi-modal"); },
+            image: function () { return `${BASE_URL}/resources/images/backgroundOBI.jpg`; },
         },
         actions: {
             loginTrigger: function () {
@@ -96,14 +98,10 @@ defineComponent({
             },
             inviaRichiesta() {
                 if (this.modello.nome && this.modello.cognome) {
+                    const nomePortale = this.portale != "Servizi OBI" ? `per ${this.portale}` : ".";
                     try {
-                        let subject = "Richiesta Dati di Accesso ai Servizi OBI";
-                        let corpo = `l'utente ${this.modello.nome} ${this.modello.cognome} richiede un intervento sui dati di accesso ${this.portale != "Servizi OBI" ? `per il portale ${this.portale}` : "."}
-                        
-                        ${this.modello.negozio ? `Negozio di riferimento: ${this.modello.negozio},` : ""}
-                        Richiesta:
-
-                        ${this.modello.note}`;
+                        let subject = `Richiesta Dati di Accesso ${nomePortale}`;
+                        let corpo = `l'utente ${this.modello.nome} ${this.modello.cognome} richiede un intervento sui dati di accesso:\n\n${this.modello.negozio ? `Negozio di riferimento: ${this.modello.negozio},` : ""}\nRichiesta: ${this.modello.note}`;
                         sendEmailToAssistenza(subject, corpo);
                     } catch (ex) {
                         obiAlert("Non è stato possibile inviare l'email", { type: "error" }, { source: "Login", message: ex });

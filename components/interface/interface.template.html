@@ -34,6 +34,27 @@
         <div style="width: fit-content;">
             <obi-calendar></obi-calendar>
         </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             obi-gantt sample
+             ══════════════════════════════════════════════════════════════ -->
+        <div display-column gap="sm" style="width: 100%;">
+            <obi-title titolo="obi-gantt" descrizione="Vista Gantt + lista task con filtri persistenti"></obi-title>
+
+            <!-- The component fills its container width; set a max-height so the
+                 inner panels are scrollable. -->
+            <div style="width: 100%; height: 520px; display: flex;">
+                <obi-gantt
+                    id="demo_gantt"
+                    :tasks="ganttTasks"
+                    @opentask="onOpenTask"
+                    style="width: 100%;">
+                </obi-gantt>
+            </div>
+
+            <!-- Toast / feedback area -->
+            <div id="gantt_feedback" style="font-size:.85rem; opacity:.7; min-height:1.4em;"></div>
+        </div>
     </div>
 
     <script type="module">
@@ -46,16 +67,26 @@
 
         RenderEngine.instance.start("template").build({
             dataset: {
-                url:"",
+                url: "",
+
+                // ── obi-gantt sample data ────────────────────────────────
+                ganttTasks: buildSampleTasks(),
             },
             computed: {},
             actions: {
                 toggleDarkmode: function () {
                     View.darkmode();
                 },
-                loadImage(evt){
+                loadImage(evt) {
                     this.url = pipeline.create(evt.target.files[0], "testImage");
-                }
+                },
+
+                // ── obi-gantt opentask handler ───────────────────────────
+                onOpenTask(task) {
+                    const fb = document.getElementById("gantt_feedback");
+                    if (fb) fb.textContent = `✔ opentask fired → #${task.id} "${task.nome}"`;
+                    console.log("[obi-gantt] opentask:", task);
+                },
             },
             events: [
                 {
@@ -137,6 +168,134 @@
                 }
             }
             return filter;
+        }
+
+        // ── obi-gantt: sample tasks ────────────────────────────────────────
+        function buildSampleTasks() {
+            const now = new Date();
+            const d = (offsetDays) => {
+                const x = new Date(now);
+                x.setDate(x.getDate() + offsetDays);
+                x.setHours(0, 0, 0, 0);
+                return x;
+            };
+            return [
+                {
+                    id: 1, idStato: 1,
+                    nome: "Analisi requisiti",
+                    note: "Raccolta e analisi dei requisiti funzionali.",
+                    tags: "Analisi,Pianificazione",
+                    progetto: "Progetto Alpha",
+                    owner: "Marco Rossi",
+                    stato: "Nuova",
+                    messaggi: 2,
+                    insertTime: d(-20), startDate: d(-15), deadline: d(-5),
+                    responsabili: [{ username: "g.verdi", email: "g.verdi@obi.it" }],
+                },
+                {
+                    id: 2, idStato: 3,
+                    nome: "Progettazione DB",
+                    note: "Schema tabelle e relazioni.",
+                    tags: "Database,Backend",
+                    progetto: "Progetto Alpha",
+                    owner: "Laura Bianchi",
+                    stato: "In Corso",
+                    messaggi: 0,
+                    insertTime: d(-18), startDate: d(-10), deadline: d(5),
+                    responsabili: [{ username: "m.neri", email: "m.neri@obi.it" }],
+                },
+                {
+                    id: 3, idStato: 3,
+                    nome: "Sviluppo API REST",
+                    note: "Implementazione endpoint backend.",
+                    tags: "Backend,API",
+                    progetto: "Progetto Alpha",
+                    owner: "Marco Rossi",
+                    stato: "In Corso",
+                    messaggi: 5,
+                    insertTime: d(-12), startDate: d(-8), deadline: d(12),
+                    responsabili: [
+                        { username: "g.verdi", email: "g.verdi@obi.it" },
+                        { username: "a.russo", email: "a.russo@obi.it" },
+                    ],
+                },
+                {
+                    id: 4, idStato: 2,
+                    nome: "Design UI/UX",
+                    note: "Wireframe e mockup delle schermate principali.",
+                    tags: "Frontend,Design",
+                    progetto: "Progetto Beta",
+                    owner: "Sara Esposito",
+                    stato: "Approvata",
+                    messaggi: 1,
+                    insertTime: d(-25), startDate: d(-20), deadline: d(-2),
+                    responsabili: [{ username: "l.ferrari", email: "l.ferrari@obi.it" }],
+                },
+                {
+                    id: 5, idStato: 4,
+                    nome: "Sviluppo componenti",
+                    note: "Creazione componenti riutilizzabili.",
+                    tags: "Frontend,Vue",
+                    progetto: "Progetto Beta",
+                    owner: "Sara Esposito",
+                    stato: "In Lavorazione",
+                    messaggi: 3,
+                    insertTime: d(-14), startDate: d(-6), deadline: d(8),
+                    responsabili: [{ username: "l.ferrari", email: "l.ferrari@obi.it" }],
+                },
+                {
+                    id: 6, idStato: 5,
+                    nome: "Test di integrazione",
+                    note: "Collaudo end-to-end del sistema.",
+                    tags: "QA,Test",
+                    progetto: "Progetto Alpha",
+                    owner: "Marco Rossi",
+                    stato: "Pubblicata",
+                    messaggi: 0,
+                    insertTime: d(-30), startDate: d(-28), deadline: d(-3), endDate: d(-3),
+                    versione: "1.0.0",
+                    responsabili: [{ username: "a.russo", email: "a.russo@obi.it" }],
+                },
+                {
+                    id: 7, idStato: 6,
+                    nome: "Deploy ambiente staging",
+                    note: "Rilascio su ambiente di pre-produzione.",
+                    tags: "DevOps,Release",
+                    progetto: "Progetto Beta",
+                    owner: "Laura Bianchi",
+                    stato: "Archiviata",
+                    messaggi: 0,
+                    insertTime: d(-40), startDate: d(-35), deadline: d(-20),
+                    responsabili: [{ username: "m.neri", email: "m.neri@obi.it" }],
+                },
+                {
+                    id: 8, idStato: 3,
+                    nome: "Ottimizzazione performance",
+                    note: "Profiling e tuning delle query critiche.",
+                    tags: "Backend,Performance",
+                    progetto: "Progetto Gamma",
+                    owner: "Carlo Mancini",
+                    stato: "In Corso",
+                    messaggi: 2,
+                    insertTime: d(-5), startDate: d(0), deadline: d(20),
+                    responsabili: [
+                        { username: "g.verdi", email: "g.verdi@obi.it" },
+                        { username: "m.neri",  email: "m.neri@obi.it"  },
+                    ],
+                },
+                {
+                    id: 9, idStato: 1,
+                    nome: "Documentazione tecnica",
+                    note: "Redazione manuale tecnico e API docs.",
+                    tags: "Docs",
+                    progetto: "Progetto Gamma",
+                    owner: "Carlo Mancini",
+                    stato: "Nuova",
+                    messaggi: 0,
+                    insertTime: d(-2), startDate: d(3), deadline: d(25),
+                    responsabili: [{ username: "l.ferrari", email: "l.ferrari@obi.it" }],
+                },
+            ];
         }
     </script>
 </body>

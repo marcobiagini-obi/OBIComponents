@@ -447,38 +447,3 @@ async function checkPasswordEditing(utente, inputCurrent, inputNew, inputRepeat)
 
     return true;
 }
-
-//OBSOLETE
-// //Controlla che la password attuale corrisponda
-// checkCurrentPassword() {
-//     if (this.password.old != this.utente.password) {
-//         this.__node.getChildContext("obi-textbox[name='currentPassword']").invalid = true;
-//         this.__node.getChildContext("obi-textbox[name='currentPassword']").messaggio = "Inserire la password corretta.";
-//         return false;
-//     }
-//     this.__node.getChildContext("obi-textbox[name='currentPassword']").invalid = false;
-//     this.__node.getChildContext("obi-textbox[name='currentPassword']").messaggio = "";
-//     return true;
-// },
-// //controlla che la password ripetuta sia uguale a quella nuova
-// checkSamePassword() {
-//     if (this.password.repeat != this.password.updated) {
-//         this.__node.getChildContext("obi-textbox[name='repeatPassword']").invalid = true;
-//         this.__node.getChildContext("obi-textbox[name='repeatPassword']").messaggio = "Le password non corrispondono.";
-//         return false;
-//     }
-//     this.__node.getChildContext("obi-textbox[name='repeatPassword']").invalid = false;
-//     this.__node.getChildContext("obi-textbox[name='repeatPassword']").messaggio = "";
-//     return true;
-// },
-// //Controlla che la nuova password sia diversa da quella attuale
-// checkDifferentPassword() {
-//     if (this.password.updated == this.password.old) {
-//         this.__node.getChildContext("obi-textbox[name='newPassword']").invalid = true;
-//         this.__node.getChildContext("obi-textbox[name='newPassword']").messaggio = "Inserire una password diversa da quella attuale.";
-//         return false;
-//     }
-//     this.__node.getChildContext("obi-textbox[name='newPassword']").invalid = false;
-//     this.__node.getChildContext("obi-textbox[name='newPassword']").messaggio = "";
-//     return true;
-// },

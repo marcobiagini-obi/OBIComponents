@@ -107,19 +107,26 @@ defineComponent({
 });
 
 export function checkValue(check, value) {
-	if (!checkHtmlWhitelist(value, ['STRONG', 'EM', 'U', 'S', 'DIV', 'P', '#text'])) return false;
+	if (value == null) return true;
+	let str = typeof value === "object" ? (value.value ?? value.label ?? "") : value.toString();
+	if (!checkHtmlWhitelist(str, ['STRONG', 'EM', 'U', 'S', 'DIV', 'P', '#text'])) return false;
 	if (check) {
 		switch (check) {
 			case "email":
-				return Collection.regexp.mail.test(value);
+				Collection.regexp.mail.lastIndex = 0;
+				return Collection.regexp.mail.test(str);
 			case "multiemail":
-				return Collection.regexp.multiplemail.test(value);
+				Collection.regexp.multiplemail.lastIndex = 0;
+				return Collection.regexp.multiplemail.test(str);
 			case "numeric":
-				return Collection.regexp.numeric.test(value);
+				Collection.regexp.numeric.lastIndex = 0;
+				return Collection.regexp.numeric.test(str);
 			case "textual":
-				return Collection.regexp.textual.test(value);
+				Collection.regexp.textual.lastIndex = 0;
+				return Collection.regexp.textual.test(str);
 			case "date":
-				return Collection.regexp.dateformat.test(value);
+				Collection.regexp.dateformat.lastIndex = 0;
+				return Collection.regexp.dateformat.test(str);
 		}
 	}
 	return true;

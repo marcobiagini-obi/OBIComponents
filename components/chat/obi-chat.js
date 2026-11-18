@@ -13,6 +13,7 @@ import Message from "../../src/models/Message.js";
 import { enumStatiMessaggio } from "../../src/models/Message.js";
 import Chat from "../../src/models/Chat.js";
 import { closeFloatingItems, closeOpenedMenus, openFloatingMenu } from "../../LAMP/RenderModule/components/float.component/float.component.js";
+import { exception } from "../../LAMP/ServerModule/modules/references.js";
 
 const localMessagesKey = "chat_unsent";
 const messaggiApiUrl = `${API_URL}/obicomunicazioni/api/messaggi`;
@@ -43,9 +44,9 @@ defineComponent({
     <div :hidden='details' chat-list @scroll='scrollController' @render='updateScrollPosition' @click='$.viewOptions = ""'></div>
     <div :hidden='details' chat-options display-column gap='sm'>
         <obi-button name='scroller' variant='elevated' @click='scrollToNext'><obi-icon nome='keyboard_double_arrow_down'></obi-icon></obi-button>
-        <section options :hidden='$.viewOptions != "options"' display-column gap='sm'>
-            <obi-button @click='attachToMessage' size='sm' label='Allega File' prepend='attach_file_add'></obi-button>
-            <obi-button @click='openEmailForm' size='sm' label='Invia Email' prepend='attach_email'></obi-button>
+        <section options :hidden='$.viewOptions != "options"' display-row gap='sm'>
+            <obi-button flex-size='auto' @click='attachToMessage' size='sm' label='Allega File' prepend='attach_file_add'></obi-button>
+            <obi-button flex-size='auto' @click='openEmailForm' size='sm' label='Invia Email' prepend='attach_email'></obi-button>
         </section>
         <section reply :hidden='!$.isReplying' padding='md'>
             <obi-icon :nome='$.editingMessageId ? "edit" : "reply"'></obi-icon>
@@ -58,10 +59,10 @@ defineComponent({
         <section emailForm :hidden='$.viewOptions != "emailform"' display-grid='blog' gap='sm' padding='sm'>
             <obi-title size='sm' margin='md' grid-article titolo='Imposta un invio email'></obi-title>
             <group-component grid-article>
-                <obi-chiplist label='Destinatari' :valore='email.receivers' :opzioni='mailinglist' @changed='setupEmailSender' separatore=',' not-select-all></obi-chiplist>
+                <obi-chiplist label='Destinatari' :valore='email.receivers' :opzioni='mailinglist' @changed='setupEmailSender' separatore=',' not-select-all format='email'></obi-chiplist>
                 <obi-button size='sm' label='cc' @click='$.email.copyEnabled = !$.email.copyEnabled'></obi-button>
             </group-component>
-            <obi-chiplist :hidden='!$.email.copyEnabled' grid-article label='Copia' :valore='email.copy' :opzioni='mailinglist' @changed='setupEmailSender' separatore=',' not-select-all></obi-chiplist>
+            <obi-chiplist :hidden='!$.email.copyEnabled' grid-article label='Copia' :valore='email.copy' :opzioni='mailinglist' @changed='setupEmailSender' separatore=',' not-select-all format='email'></obi-chiplist>
             <obi-textbox grid-article label='Soggetto' :valore='email.subject' @changed='setupEmailSender'></obi-textbox>
         </section>
         <section senders :hidden='$.viewOptions != "senders"'>
@@ -444,32 +445,40 @@ defineComponent({
 
                     if (sentMessages.length > 0 && this.email.subject && this.email.receivers.length > 0) {
                         let idMessage = sentMessages[0].id;
-                        const me = this;
+                        const receivers = this.email.receivers.join(";");
+                        const subject = this.email.subject;
+                        const copy = this.email.copyEnabled ? (this.email.copy.join(";") || "") : "";
+
                         loadApi(`${BASE_URL}/src/models/EmailRequest.js`, async (EmailRequest) => {
-                            const url = `${API_URL}/obiHub/api/Hub/Email`;
-                            const from = me.currentUser?.email ?? `applicativi@obi-italia.it`;
+                            const url = `${API_URL}/OBIComunicazioni/api/Email`;
+                            const from = this.currentUser?.email ?? `applicativi@obi-italia.it`;
+                            const signature = getEmailSignature(this.currentUser);
+                            let body = textMessage?.note + "\n" + signature;
                             const request = new EmailRequest({
                                 header: {
                                     from: from,
                                     sender: from,
-                                    copy: me.email.copyEnabled ? (me.email.copy.join(";") || "") : "",
-                                    receiver: me.email.receivers.join(";") || "",
-                                    subject: me.email.subject,
+                                    copy: copy,
+                                    receiver: receivers,
+                                    subject: subject,
                                 },
-                                content: textMessage?.note.split(/(?:<br>|\n)/g) ?? "",
+                                content: body.split(/(?:<br>|\n)/g) ?? [],
                                 files: message?.attachments?.map(d => ({ filename: d.nome, content: d.fileData })) ?? [],
                             });
+                            const requestBody = JSON.stringify(request);
+                            console.log("Email Request payload:", request);
+                            console.log("Email Request json:", requestBody);
                             await fetch(url, {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify(request)
+                                body: requestBody
                             }).then(async (res) => {
                                 if (!res?.ok) throw new Error(`Errore nell'invio della email: ${res.status} - ${res.statusText}`);
                                 const attributo = Message.instanceAttribute({ title: request.header.receiver, icona: "mark_email_read", relevance: "warning" });
-                                let chatMessage = me.chat.messages.find(m => m.id === idMessage);
+                                let chatMessage = this.chat.messages.find(m => m.id === idMessage);
                                 chatMessage.attributi.push(attributo);
-                                await Service.instance.put(`${me.submit || me.src}/${idMessage}`, chatMessage.toDBModel());
-                                me.render();
+                                await Service.instance.put(`${this.submit || this.src}/${idMessage}`, chatMessage.toDBModel());
+                                this.render();
                             }).catch((ex) => { console.error(ex); obiAlert("Errore nell'invio della email", { type: "error" }); });
                         });
                     }
@@ -892,8 +901,7 @@ async function processMessageContents(messaggio) {
 
     // Dynamically import Messaggio and Notifica if not running on localhost
     if (!isLocal()) {
-        await loadApi(
-            `${API_URL}/OBIcomunicazioni/scripts/models/notifica.model.js`,
+        await loadApi(`${API_URL}/OBIcomunicazioni/scripts/models/notifica.model.js`,
             `${API_URL}/OBIArchivio/Scripts/services/documenti.service.js`,
             async (Notifica, DocumentiService) => {
                 const service = new DocumentiService();
@@ -911,4 +919,34 @@ async function processMessageContents(messaggio) {
             });
     }
     return { messaggi, notifiche, menzioni };
+}
+
+function escapeEmailHtml(value = "") {
+    return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+    })[char]);
+}
+
+function getEmailSignature(user = {}) {
+    const fullName = [user.nome, user.cognome].filter(Boolean).join(" ") || user.username || "";
+    const role = user.note || user.ruolo || "";
+    const email = user.email || "";
+    const safeName = escapeEmailHtml(fullName);
+    const safeRole = escapeEmailHtml(role);
+    const safeEmail = escapeEmailHtml(email);
+
+    return `<div style="font-family:Arial,sans-serif;font-size:10pt;color:#333;line-height:1.45">
+        <p>Distinti saluti / Best regards</p>
+        <p><strong>${safeName}</strong>${safeRole ? `<br>${safeRole}` : ""}</p>
+        <p><img src="https://bilder.obi.de/e62b2c99-989f-450c-a48b-69cde132d2f1/pr016/" width="175" alt="OBI"></p>
+        <p>OBI Italia S.r.l.</p>
+        <p>email: <a href="mailto:${safeEmail}">${safeEmail}</a></p>
+        <p><a href="https://www.obi-italia.it/">www.obi-italia.it</a></p>
+        <p>Società a socio unico soggetta all’attività di direzione<br>e coordinamento ex art. 2497 bis C.C. da parte<br>di OBI Group Holding SE &amp; Co. KGaA</p>
+        <p><img src="https://bilder.obi.de/abee03b9-6288-4b04-af16-730ea7ef4467/pr016/" width="216" height="76" alt="Certificazione TÜV"><img src="https://bilder.obi.de/f77ae2b2-d26b-4f82-8249-3820c583a406/pr016/" width="216" height="76" alt="Certificazione TÜV"></p>
+    </div>`;
 }

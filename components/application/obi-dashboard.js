@@ -16,7 +16,7 @@ defineComponent({
             <div display-column>
                 <obi-card variant="filled" descrizione='DASHBOARD' style='margin: 0; border-radius: unset' :prepend='prependDashboard'>
                     <div display-grid gap='xs' style='max-height: 314px; padding: 8px; padding-top: unset; overflow-y: auto;' x4>
-                        <obi-card cmd-for='item in apps' grid-size='2' margin='none' interactable column :prepend="$.getLogo($.item)"
+                        <obi-card cmd-for='item in apps' grid-size='2' margin='none' interactable column :prepend="item.icona"
                         :descrizione='item.label' :data-value='item.id' @click='openApp'variant="filled">
                             <obi-badge cmd-if='item.hasNotifiche' relevance='primary' dot style='top: 12px;'></obi-badge>
                         </obi-card>
@@ -75,7 +75,7 @@ defineComponent({
                     this.current = data.find(d => d.id == this.progetto);
                     this.apps = data?.filter(e => e.id != this.current?.id)
                         .sort((a, b) => b.idTipoApplicazione - a.idTipoApplicazione)
-                        .map(p => ({ ...p, linkEsterni: p.linkEsterniJson ? JSON.parse(p.linkEsterniJson) : [] })) ?? [];
+                        .map(p => ({ ...p, linkEsterni: p.linkEsterniJson ? JSON.parse(p.linkEsterniJson) : [], icona: this.getLogo(p) })) ?? [];
                     this.getNotifiche();
                 }
             },
@@ -111,18 +111,18 @@ defineComponent({
                 let id = Number(target.getAttribute("data-value"));
                 if (id && !isNaN(id)) {
                     const app = this.apps.find(a => a.id == id);
-                    const installazione = app?.linkEsterni?.find(l => l.nome == "Produttivo")?.link;
-                    if (app && installazione) {
-                        switch (app.idTipoApplicazione) {
-                            case 7:
-                                if (app.versione.includes("U1")) {
-                                    window.open(`${installazione}/Accesso/HubLogin/${UserHandler.instance.user?.codice}`, '_blank');
-                                    break;
-                                }
-                            default:
-                                window.open(installazione, '_blank');
+                    let installazione = app?.linkEsterni?.find(l => l.nome == "Produttivo")?.link;
+                    if (!installazione) { obiAlert("Installazione non trovata", { type: "warning" }); return; }
+                    installazione = installazione.replace("/Accesso", "");
+                    switch (app.idTipoApplicazione) {
+                        case 7:
+                            if (app.versione.includes("U1")) {
+                                window.open(`${installazione}/Accesso/HubLogin/${UserHandler.instance.user?.codice}`, '_blank');
                                 break;
-                        }
+                            }
+                        default:
+                            window.open(installazione, '_blank');
+                            break;
                     }
                 }
             },
@@ -139,7 +139,7 @@ defineComponent({
                 }
             },
             getLogo(prj) {
-                return prj.logo ? `<obi-logo :src='${prj.logo}'></obi-logo>` : "<obi-icon nome='grid_view'></obi-icon>";
+                return prj?.logo ? `<obi-logo :src='${prj.logo}'></obi-logo>` : "<obi-icon nome='grid_view'></obi-icon>";
             },
             async viewAll() {
                 for (let notifica of this.notifiche) {

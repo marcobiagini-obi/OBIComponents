@@ -18,7 +18,7 @@
     <div id="template" display-grid="blog" margin="xl" paddin="xl" gap="xl">
         <section name="input-container" grid-article display-column gap="md">
             <obi-combobox label="demo combobox" :valore="valoreCombobox" :opzioni="listaCombobox" :messaggio="valoreCombobox"></obi-combobox>
-            <obi-chiplist label="Demo Chiplist" :valore="selezione" :opzioni="negozi" select-mode="single"></obi-chiplist>
+            <obi-chiplist label="Demo Chiplist" :valore="selezione" :opzioni="negozi" select-mode="single" format="email"></obi-chiplist>
             {{"Valori Selezionati: " + $.selezione.join(', ')}}
             <obi-textbox label="Prova" count='10'></obi-textbox>
             <obi-textarea label="Prova" :valore="testo" enable-format></obi-textarea>
@@ -37,7 +37,7 @@
 
         RenderEngine.instance.start("template").build({
             dataset: {
-                selezione: [1, 4, 5, 6],
+                selezione: [],
                 negozi: [],
                 now: null,
                 testo: "",
@@ -74,12 +74,12 @@
             return await new Promise(resolve => {
                 setTimeout(() => {
                     resolve([
-                        {label: "001 Negozio 1", value: 1},
-                        {label: "002 Negozio 2", value: 2},
-                        {label: "003 Negozio 3", value: 3},
-                        {label: "004 Negozio 4", value: 4},
-                        {label: "005 Negozio 5", value: 5},
-                        {label: "006 Negozio 6", value: 6}, 
+                        {label: "negozio1@obi.com", value: 1},
+                        {label: "negozio2@obi.com", value: 2},
+                        {label: "negozio3@obi.com", value: 3},
+                        {label: "negozio4@obi.com", value: 4},
+                        {label: "negozio5@obi.com", value: 5},
+                        {label: "negozio6@obi.com", value: 6}, 
                     ]);
                 }, 1000);
             });

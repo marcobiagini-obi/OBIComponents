@@ -15,7 +15,7 @@ defineComponent(
                     <obi-chip cmd-if='$.stamp.length > 5' relevance='danger' label='Rimuovi' prepend='clear_all' interactable :disabled="isDisabled" @click='removeAll'></obi-chip>
                     <obi-chip relevance='neutral' cmd-for='item in stamp' :label='$.item?.label ?? $.item' prepend='close' interactable :disabled="isDisabled"
                     @click='removeValue' :data-index=':index' style='min-width: fit-content'></obi-chip>
-                    <div contenteditable='true' cmd-model='inputValue' @input='triggerChange' @keydown='triggerChange'
+                    <div contenteditable='true' cmd-model='inputValue' @input='triggerChange' @keydown='triggerChange' @blur='triggerChange'
                         class='new-line' :disabled='isDisabled' :empty='isEmpty'></div>
                     <span cmd-if='!$.valore' placeholder>{{placeholder}}</span>
                     <label for='input' cmd-if='label'>{{label}}</label> 
@@ -27,7 +27,7 @@ defineComponent(
                 </div> 
             </div>
             <obi-list cmd-if='$.selectOptions?.length' floating-item interact variant='elevated'>
-                <list-item float-toggle cmd-for='item in selectOptions' :value='$.item.value' @click='select' cmd-filter='$.value ? true : item?.label.toLowerCase().includes($.selected_text?.toLowerCase())'>{{item.label}}</list-item>
+                <list-item float-toggle cmd-for='item in selectOptions' :value='$.item.value' @click='select' cmd-filter='$.value ? true : item?.label.toLowerCase().includes($.selected_text?.toLowerCase())' style='gap: unset'>{{item.label}}</list-item>
             </obi-list>`,
         options: {
             inputs: ["label", "valore", "opzioni", "messaggio", "placeholder", "separatore", "format"],
@@ -112,10 +112,15 @@ defineComponent(
                     }
 
                     // Handle Enter key or insertParagraph
-                    if ((evt && evt.inputType === "insertParagraph") || evt?.key === "Enter") {
+                    if (evt?.inputType === "insertParagraph" || evt?.key === "Enter" || evt?.type === "blur") {
                         evt.preventDefault?.();
                         let option = findOption(cont);
-                        this.stamp.push(option || { label: cont, value: cont });
+                        let value = option;
+                        if (!value) {
+                            if (!cont || !checkValue(this.format, cont)) return;
+                            value = { label: cont, value: cont };
+                        }
+                        this.stamp.push(value);
                         this.inputValue = "";
                         this.valore = this.getValue();
                         this.__node.trigger("changed", this.value);
@@ -146,16 +151,18 @@ defineComponent(
                 },
                 select(evt) {
                     const value = evt.currentTarget.getAttribute("value");
-
                     if (value === selectAllKey) {
-                        this.stamp = Array.isArray(this.opzioni)
-                            ? this.opzioni.map(item => item)
-                            : [];
+                        this.stamp = Array.isArray(this.opzioni) ? this.opzioni.map(item => item) : [];
                         this.valore = this.getValue();
+                        this.__node.trigger("change", this.value);
                         this.__node.trigger("changed", this.value);
                         return;
                     }
-                    this.inputValue = evt.currentTarget.innerText + this.separatore;
+
+                    const option = this.opzioni?.find(item => (item?.value ?? item) == value);
+                    const text = option ? (option.label ?? option.value ?? option) : evt.currentTarget.textContent.trim();
+
+                    this.inputValue = text + this.separatore;
                     this.triggerChange(evt);
                 },
                 syncValue() {
