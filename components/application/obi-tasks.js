@@ -222,7 +222,7 @@ defineComponent({
     template: `<obi-card :variant='$.task.idStato < 6 ? "filled" : "outlined"' :obi-task='task.id' margin='none' @click='openProjectIntoHub' :interactable='intoHub'>
         <card-header padding='sm'>
             {{task.icon}}
-            <obi-title :titolo='task.nome' :descrizione='$.intoHub ? $.task.progetto : ""' :text-color='$.task.expired ? "danger" : ""' flex-size='auto' style='font-size: 1em;' margin-side='sm'></obi-title>
+            <obi-title reverse :titolo='task.nome' :descrizione='$.intoHub ? $.task.progetto : ""' :text-color='$.task.expired ? "danger" : ""' flex-size='auto' style='font-size: 1em;' margin-side='sm'></obi-title>
             {{task.stampOwnerInfo}}
         </card-header>
         <card-body padding='sm'>{{task.stampDetails}}</card-body>
@@ -268,9 +268,9 @@ defineComponent({
                     <obi-chip @click='setFilter' data-value='trash' :variant='$.filter == "trash" ? "filled" : "outlined"' relevance='danger' interactable title='Richieste Archiviate'><obi-icon nome='delete'></obi-icon></obi-chip>
                 </div>
                 <obi-chiplist label='Filtra per Tag' :options='tagsListOptions' :valore='tagsFilter'></obi-chiplist>
-                <div @scroll='onTasksScroll' display-column gap='xs' style='overflow-y: auto;'>
-                    <obi-task-item cmd-for='task in filteredTasks' :task='task'></obi-task-item>
-                    <div cmd-if='$.filteredTasks.length == 0' class='txt-body2' style='text-align: center; padding: 16px;'>Nessuna attività trovata.</div>
+                <div @scroll='onTasksScroll' display-grid gap='xs' style='overflow-y: auto;'>
+                    <obi-task-item grid-size='6' cmd-for='task in filteredTasks' :task='task'></obi-task-item>
+                    <div grid-size='12' cmd-if='$.filteredTasks.length == 0' class='txt-body2' style='text-align: center; padding: 16px;'>Nessuna attività trovata.</div>
                 </div>
             </card-body>
         </obi-card>
